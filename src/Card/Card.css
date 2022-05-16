@@ -1,0 +1,10 @@
+.Card {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    background-color: white;
+    border-radius: 10px;
+    /*border: 1px solid black;*/
+    box-shadow: 0 0 7px 3px #00000054;
+}
