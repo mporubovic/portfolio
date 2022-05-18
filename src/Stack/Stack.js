@@ -5,6 +5,7 @@ import {randomColor} from "../util";
 
 export default function Stack() {
 
+
     const [cards, setCards] = useState(() => {
         let _cards = []
         for (let i = 0; i < 5; i++) {
@@ -15,7 +16,9 @@ export default function Stack() {
 
     const [didMount, setDidMount] = useState(false)
 
-    useEffect(() => setDidMount(true))
+    useEffect(() => setDidMount(true), [])
+
+
 
     const stackDiv = useRef()
     const boundingRect = stackDiv?.current?.getBoundingClientRect()
@@ -24,21 +27,31 @@ export default function Stack() {
         y: boundingRect?.y
     }
 
-    const [stackCards, setStackCards] = useState(() => {
-        let _ = []
-        cards.forEach(c => _.push(c.id))
-        return _
-    });
+    const [stackCards, _setStackCards] = useState(cards.map(c => c.id));
+    const stackCardsRef = useRef(stackCards)
+    const setStackCards = (val) => {
+        _setStackCards(val)
+        stackCardsRef.current = val
+    }
 
-    const [boardCards, setBoardCards] = useState([])
+    const [previewCard, setPreviewCard] = useState(-1)
+
+    const [boardCards, _setBoardCards] = useState([])
+    const boardCardsRef = useRef(boardCards)
+    const setBoardCards = (val) => {
+        _setBoardCards(val)
+        boardCardsRef.current = val
+    }
+
+    const [stackLock, setStackLock] = useState(false)
 
     function drawCard(cardId) {
-        setBoardCards([...boardCards, cardId])
-        setStackCards(stackCards.filter(card => card !== cardId))
+        setBoardCards([...boardCardsRef.current, cardId])
+        setStackCards(stackCardsRef.current.filter(card => card !== cardId))
     }
 
     function returnCard(cardId) {
-        let cardsInStack = [...stackCards]
+        let cardsInStack = [...stackCardsRef.current]
 
         let insertionIndex = 0
         while (cardsInStack[insertionIndex] < cardId) insertionIndex ++
@@ -46,13 +59,12 @@ export default function Stack() {
         cardsInStack.splice(insertionIndex, 0, cardId)
 
         setStackCards(cardsInStack)
-        setBoardCards([...boardCards].filter(card => card.id !== cardId))
+        setBoardCards([...boardCardsRef.current].filter(card => card.id !== cardId))
 
-        console.log(cardsInStack, stackCards)
     }
 
     function swapCards(cardInStack, cardOnBoard) {
-        let cardsInStack = [...stackCards]
+        let cardsInStack = [...stackCardsRef.current]
         let cardsOnBoard = [...boardCards]
 
         cardsInStack = cardsInStack.filter(card => card !== cardInStack) // remove card from stack
@@ -68,9 +80,23 @@ export default function Stack() {
         setStackCards(cardsInStack)
     }
 
+    function shiftCards(card1id, shift) {
+        let card1index = stackCardsRef.current.indexOf(card1id)
+        let card2index = shift > 0 ? Math.min(stackCardsRef.current.length-1, card1index+shift) : Math.max(0, card1index+shift)
+        let card2id = stackCardsRef.current[card2index]
+
+        let cards = [...stackCardsRef.current]
+        cards[card1index] = card2id
+        cards[card2index] = card1id
+
+        setStackCards(cards)
+
+        return card1index !== card2index
+    }
+
     function onCardClick(cardId) {
-        if (boardCards.length > 0) {
-            swapCards(cardId, boardCards[0])
+        if (boardCardsRef.current.length > 0) {
+            swapCards(cardId, boardCardsRef.current[0])
         } else {
             drawCard(cardId)
         }
@@ -82,11 +108,20 @@ export default function Stack() {
                 didMount && cards.map(card => (
                     <Card id={card.id}
                           key={card.id}
+                          lock={() => setStackLock(true)}
+                          unlock={() => {
+                              setStackLock(false)
+                          }}
+                          locked={stackLock}
                           stackPosition={stackCards.indexOf(card.id)}
                           isActive={boardCards.indexOf(card.id) > -1}
                           stackState={stackState}
-                          clickHandler={() => onCardClick(card.id)}>
-                    </Card>
+                          preview={() => setPreviewCard(card.id)}
+                          unpreview={() => setPreviewCard(-1)}
+                          dim={previewCard > -1 && previewCard !== card.id}
+                          clickHandler={() => onCardClick(card.id)}
+                          shift={(s) => shiftCards(card.id, s)}
+                    />
                 ))
             }
         </div>
