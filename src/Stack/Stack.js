@@ -22,8 +22,8 @@ backgroundBlendMode: "screen, overlay, overlay, darken, normal"}},
 backgroundBlendMode: "color-dodge, screen, overlay, exclusion, difference, normal"}},
     {text: "Society Designs", background: {background: "linear-gradient(235deg, #FFFFFF 0%, #000F25 100%), linear-gradient(180deg, #6100FF 0%, #000000 100%), linear-gradient(235deg, #FFA3AC 0%, #FFA3AC 40%, #00043C calc(40% + 1px), #00043C 60%, #005D6C calc(60% + 1px), #005D6C 70%, #00C9B1 calc(70% + 1px), #00C9B1 100%), linear-gradient(125deg, #FFA3AC 0%, #FFA3AC 40%, #00043C calc(40% + 1px), #00043C 60%, #005D6C calc(60% + 1px), #005D6C 70%, #00C9B1 calc(70% + 1px), #00C9B1 100%)",
 backgroundBlendMode: "soft-light, screen, darken, normal"}},
-    {text: "Tutoring App", background: {background: "radial-gradient(100% 225% at 100% 0%, #FAFF00 0%, #000000 100%), linear-gradient(235deg, #DB00FF 0%, #000000 100%), linear-gradient(45deg, #241E92 0%, #241E92 40%, #5432D3 40%, #5432D3 50%, #7B6CF6 50%, #7B6CF6 70%, #E5A5FF 70%, #E5A5FF 100%), linear-gradient(180deg, #01024E 0%, #01024E 43%, #543864 43%, #543864 62%, #8B4367 62%, #8B4367 80%, #FF6464 80%, #FF6464 100%)",
-backgroundBlendMode: "overlay, hard-light, overlay, normal"}},
+    {text: "Tutoring App", background: {background: "radial-gradient(65% 100% at 50% 0%, #00FF94 0%, rgba(0, 255, 148, 0.25) 100%), linear-gradient(230deg, #000000 25%, #170059 100%), linear-gradient(215deg, #FFEBB9 10%, #19004E 80%), radial-gradient(100% 245% at 100% 100%, #FFFFFF 0%, #000353 100%), linear-gradient(125deg, #1400FF 0%, #3A0000 100%), linear-gradient(225deg, #00F0FF 30%, #000B6F 45%, #00EBFC 45%, #001676 65%, #00E1F6 65%, #001676 85%, #00ECFD 85%, #001676 100%), linear-gradient(135deg, #00F0FF 0%, #000B6F 15%, #00EBFC 15%, #001676 35%, #00E1F6 35%, #001676 55%, #00ECFD 55%, #001676 100%)",
+backgroundBlendMode: "soft-light, screen, overlay, overlay, difference, overlay, normal"}},
     {text: "Photography", background: {background: "linear-gradient(45deg, #000850 0%, #000320 100%), radial-gradient(100% 225% at 100% 0%, #FF6928 0%, #000000 100%), linear-gradient(225deg, #FF7A00 0%, #000000 100%), linear-gradient(135deg, #CDFFEB 10%, #CDFFEB 35%, #009F9D 35%, #009F9D 60%, #07456F 60%, #07456F 67%, #0F0A3C 67%, #0F0A3C 100%)",
 backgroundBlendMode: "screen, overlay, hard-light, normal"}},
 ]
@@ -45,7 +45,12 @@ export default function Stack() {
 
     const [didMount, setDidMount] = useState(false)
 
-    useEffect(() => setDidMount(true), [])
+    useEffect(() => {
+        setDidMount(true)
+        window.addEventListener("keydown", onKeyDown)
+
+        return () => window.removeEventListener("keydown", onKeyDown)
+    }, [])
 
 
 
@@ -81,14 +86,18 @@ export default function Stack() {
 
     function returnCard(cardId) {
         let cardsInStack = [...stackCardsRef.current]
+        if (boardCardsRef.current.length === 0 ) return
+
+        // debugger
 
         let insertionIndex = 0
-        while (cardsInStack[insertionIndex] < cardId) insertionIndex ++
+        // while (cardsInStack[insertionIndex] < cardId) insertionIndex ++
 
         cardsInStack.splice(insertionIndex, 0, cardId)
 
+        setBoardCards([...boardCardsRef.current].filter(card => card !== cardId))
         setStackCards(cardsInStack)
-        setBoardCards([...boardCardsRef.current].filter(card => card.id !== cardId))
+
 
     }
 
@@ -98,7 +107,8 @@ export default function Stack() {
 
         cardsInStack = cardsInStack.filter(card => card !== cardInStack) // remove card from stack
 
-        let insertionIndex = cardsInStack.length
+        // let insertionIndex = cardsInStack.length
+        let insertionIndex = 0
         // while (cardOnBoard > cardsInStack[insertionIndex]) insertionIndex ++
 
         cardsInStack.splice(insertionIndex, 0, cardOnBoard)
@@ -129,6 +139,11 @@ export default function Stack() {
         } else {
             drawCard(cardId)
         }
+    }
+
+    function onKeyDown(event) {
+        console.log(event)
+        if (event.key === "Escape") returnCard(boardCardsRef.current[0])
     }
 
     return (
