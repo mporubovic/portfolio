@@ -3,8 +3,37 @@
     left: 0;
     top: 0;
     user-select: none;
-    background-color: white;
+    /*background-color: white;*/
     border-radius: 10px;
     /*border: 1px solid black;*/
     box-shadow: 0 0 7px 3px #00000054;
+    overflow: hidden;
+}
+
+.bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    /*background-color: white;*/
+    font-size: 13px;
+    background-color: rgba(0,0,0,0.3);
+
+}
+
+.wrapper {
+    color: white;
+    /*background-color: ;*/
+    padding: 5px 15px;
+    /*-webkit-text-fill-color: transparent;*/
+    /*-webkit-background-clip: content;*/
+    /*background-clip: text;*/
+    /*-webkit-background-clip: text;*/
+    /*color: transparent;*/
 }

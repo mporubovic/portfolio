@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from "react";
 
 export default function Card(props) {
     const id = props.id
-    const stackSpacing = 50
+    const stackSpacing = 35
     const [offset, _setOffset] = useState(props.stackPosition*stackSpacing)
     const offsetRef = useRef(offset)
 
@@ -16,7 +16,7 @@ export default function Card(props) {
     const [prevDim, setPrevDim] = useState(props.dim)
 
     const stackRotation = '30,-6,18,45deg'
-    const previewDistance = 20
+    const previewDistance = 15
 
     const stackTransition = 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
     const dragTransition = 'transform 0.5s, opacity 0.5s'
@@ -26,15 +26,24 @@ export default function Card(props) {
     const stackOpacity = 1
 
     const defaultStyle = {
-        width: '150px',
-        height: '150px',
+        width: '170px',
+        height: '170px',
         transform: `translate(${props.stackState.x}px, ${props.stackState.y - offset}px) rotate3d(${stackRotation})`,
         transition: stackTransition,
         opacity: stackOpacity,
+        // background: `linear-gradient(150deg, ${props.content.colorA}, ${props.content.colorB})`,
+        // backgroundImage: `url(${background})`,
         zIndex: 10 + props.stackPosition,
+        ...props.content.background
     }
 
     const [style, setStyle] = useState(defaultStyle)
+    const styleRef = useRef(style)
+    // const setStyle = (val) => {
+    //     stateRef.current = val
+    //     _setStyle(val)
+    // }
+
     const [state, _setState] = useState("stack")
     const stateRef = useRef(state)
 
@@ -52,10 +61,13 @@ export default function Card(props) {
         if (pointerDown.current) {
 
             if (!dragging.current) {
-                dragging.current = false
+                dragging.current = true
+                // console.log(styleRef.current.transition)
                 props.lock()
                 props.unpreview()
                 setState("stack-to-drag")
+
+                return
             }
 
             let x = drag.current.x + event.movementX
@@ -67,19 +79,31 @@ export default function Card(props) {
                 if (props.shift(-y > 1 ? 1 : -1)) drag.current = {x: drag.current.x, y: 0}
             }
 
+            // dragging.current && setStyle({
+            // console.log(styleRef.current.transition)
             setStyle({
                 ...style,
                 opacity: 1,
                 zIndex: 10 + Math.floor(offsetRef.current / stackSpacing),
-                // zIndex: 20,
+                transition: "",
                 transform: `translate(${props.stackState.x - previewDistance + x}px, ${props.stackState.y + previewDistance - offsetRef.current + (y)}px) rotate3d(${stackRotation})`
             })
         }
     }
 
     function handlePointerUp(event) {
-        if (stateRef.current === "drag") {
-            drag.current = {x: 0, y: 0, level: 0}
+        // console.log(stateRef.current, drag.current.x, stateRef.current === "drag" && drag.current.x < -100, id)
+        // if (id === 6) console.log("up")
+        if (stateRef.current === "drag" && drag.current.x < -100) {
+            // debugger
+            drag.current = {x: 0, y: 0}
+            pointerDown.current = false
+            dragging.current = false
+            props.unlock()
+            props.clickHandler()
+        }
+        else if (stateRef.current === "drag") {
+            drag.current = {x: 0, y: 0}
             dragging.current = false
             setState("before-drag-to-stack")
             props.unlock()
@@ -101,6 +125,11 @@ export default function Card(props) {
             window.removeEventListener("pointerup", handlePointerUp)
         }
     }, [])
+
+    if (props.stackPosition !== prevPosition) {
+        setOffset(props.stackPosition * stackSpacing)
+        setPrevPosition(props.stackPosition)
+    }
 
     switch (state) {
         case "stack":
@@ -131,7 +160,8 @@ export default function Card(props) {
             setStyle({
                 ...style,
                 transform: `translate(${props.stackState.x - previewDistance}px, ${props.stackState.y - offset + previewDistance}px) rotate3d(${stackRotation})`,
-                opacity: 1
+                opacity: 1,
+                // cursor: "move",
             })
             setState("stack-to-preview")
 
@@ -139,6 +169,9 @@ export default function Card(props) {
 
         case "stack-to-preview":
             break
+
+        case "before-preview":
+
 
         case "preview":
             if (props.isActive) setState("before-stack-to-board")
@@ -176,6 +209,7 @@ export default function Card(props) {
                 setOffset(props.stackPosition * stackSpacing)
                 setPrevPosition(props.stackPosition)
             }
+            if (props.isActive) setState("before-stack-to-board")
             break
 
         case "before-drag-to-stack":
@@ -225,17 +259,17 @@ export default function Card(props) {
 
         case "board":
             if (!props.isActive) setState("before-board-to-stack")
+            if (props.stackPosition !== prevPosition) {
+                setOffset(props.stackPosition * stackSpacing)
+                setPrevPosition(props.stackPosition)
+            }
             break
 
         case "before-board-to-stack":
             setStyle({
-                ...style,
-                width: '150px',
-                height: '150px',
-                transform: `translate(${props.stackState.x}px, ${props.stackState.y - offset}px) rotate3d(${stackRotation})`, // go to bottom first
+                ...defaultStyle,
                 transition: boardTransition,
-                zIndex: 10 + props.stackPosition,
-                opacity: stackOpacity
+                zIndex: 999,
             })
             setState("board-to-stack")
             break
@@ -293,7 +327,6 @@ export default function Card(props) {
                      case "preview-to-stack":
                          setState("stack")
                          break
-
                      case "drag-to-stack":
                          setState("before-stack")
                          break
@@ -304,6 +337,13 @@ export default function Card(props) {
             }}
         >
             {id}
+
+
+            <div className="bottom">
+                <div className="wrapper">
+                    {props.content.text}
+                </div>
+            </div>
         </div>
     )
 }
