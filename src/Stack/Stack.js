@@ -124,6 +124,8 @@ export default function Stack() {
         let card2index = shift > 0 ? Math.min(stackCardsRef.current.length-1, card1index+shift) : Math.max(0, card1index+shift)
         let card2id = stackCardsRef.current[card2index]
 
+        if (card1index === card2index) return false
+
         let cards = [...stackCardsRef.current]
         cards[card1index] = card2id
         cards[card2index] = card1id

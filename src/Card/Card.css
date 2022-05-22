@@ -8,13 +8,20 @@
     /*border: 1px solid black;*/
     box-shadow: 0 0 7px 3px #00000054;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.body {
+    flex: 1;
 }
 
 .bottom {
-    position: absolute;
+    /*position: absolute;*/
     left: 0;
     right: 0;
-    bottom: 0;
+    /*bottom: 0;*/
     height: 25px;
     display: flex;
     align-items: center;

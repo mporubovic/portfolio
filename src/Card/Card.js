@@ -4,344 +4,314 @@ import {useEffect, useRef, useState} from "react";
 export default function Card(props) {
     const id = props.id
     const stackSpacing = 35
-    const [offset, _setOffset] = useState(props.stackPosition*stackSpacing)
-    const offsetRef = useRef(offset)
-
-    function setOffset(val) {
-        offsetRef.current = val
-        _setOffset(val)
-    }
-
-    const [prevPosition, setPrevPosition] = useState(props.stackPosition)
-    const [prevDim, setPrevDim] = useState(props.dim)
 
     const stackRotation = '30,-6,18,45deg'
     const previewDistance = 15
 
-    const stackTransition = 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
-    const dragTransition = 'transform 0.5s, opacity 0.5s'
-    const boardTransition = 'transform 1s, width 1s, height 1s'
+    const stackTransition = 'transform 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
+    const previewTransition = 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
+    const boardTransition = 'all 1.5s'
 
     const dimOpacity = 0.35
     const stackOpacity = 1
 
-    const defaultStyle = {
-        width: '170px',
-        height: '170px',
-        transform: `translate(${props.stackState.x}px, ${props.stackState.y - offset}px) rotate3d(${stackRotation})`,
-        transition: stackTransition,
-        opacity: stackOpacity,
-        // background: `linear-gradient(150deg, ${props.content.colorA}, ${props.content.colorB})`,
-        // backgroundImage: `url(${background})`,
-        zIndex: 10 + props.stackPosition,
-        ...props.content.background
-    }
+    const [opacity, setOpacity] = useState(0)
+    const [zIndex, setZIndex] = useState(0)
+    // const [transform, setTransform] = useState("")
+    const [transition, setTransition] = useState("")
+    const [width, setWidth] = useState("")
+    const [height, setHeight] = useState("")
 
-    const [style, setStyle] = useState(defaultStyle)
-    const styleRef = useRef(style)
-    // const setStyle = (val) => {
-    //     stateRef.current = val
-    //     _setStyle(val)
-    // }
+    const [x, setX] = useState(0)
+    const [y, setY] = useState(0)
+    const [rotation, setRotation] = useState("")
 
-    const [state, _setState] = useState("stack")
-    const stateRef = useRef(state)
-
-    function setState(val) {
-        stateRef.current = val
-        _setState(val)
-    }
-
-    const pointerDown = useRef(false)
-    const dragging = useRef(false)
+    const [stackPosition, setStackPosition] = useState(0)
+    // const [prevStackPosition, setPrevStackPosition] = useState(0)
+    const [dim, setDim] = useState(false)
 
     const drag = useRef({x: 0, y: 0})
 
-    function handlePointerMove(event) {
-        if (pointerDown.current) {
+    const [state, _setState] = useState("initial")
+    const stateRef = useRef(state)
+    const setState = (val) => {
+        _setState(val)
+        stateRef.current = val
+    }
 
-            if (!dragging.current) {
-                dragging.current = true
-                // console.log(styleRef.current.transition)
+    const [transitionEnded, setTransitionEnded] = useState(false)
+
+    const [pointer, _setPointer] = useState("out")
+    const pointerRef = useRef(pointer)
+    const setPointer = (val) => {
+        lastPointer.current = pointerRef.current
+        pointerRef.current = val
+        _setPointer(val)
+    }
+    const lastPointer = useRef("")
+
+    const states = {
+        "initial": () => {
+            setOpacity(1)
+            setZIndex(10 + props.stackPosition)
+            setWidth("170px")
+            setHeight("170px")
+
+            setX(props.stackState.x)
+            setY(props.stackState.y - props.stackPosition*stackSpacing)
+            setRotation(stackRotation)
+            setStackPosition(props.stackPosition)
+            setTransition(stackTransition)
+
+            setState("stack")
+        },
+
+        "stack": () => {
+            if (pointer === "move" && !props.locked) {
+                setPointer("in")
+                setTransition(previewTransition)
+                setX(x - previewDistance)
+                setY(y + previewDistance)
+                setState("stack-to-preview")
+            }
+
+            if (props.stackPosition !== stackPosition) {
+                setStackPosition(props.stackPosition)
+                // setTransition(stackTransition)
+                setY(props.stackState.y - props.stackPosition*stackSpacing)
+                setZIndex(10 + props.stackPosition)
+            }
+
+            if (transitionEnded) {
+                setTransitionEnded(false)
+            }
+
+        },
+
+        "stack-to-preview": () => {
+            if (pointer === "down") {
+                setPointer("in") // maybe in ?
+
+                props.clickHandler()
                 props.lock()
-                props.unpreview()
-                setState("stack-to-drag")
 
+                setTransition(boardTransition)
+                setX(0)
+                setY(0)
+                setZIndex(1)
+                setRotation("0,0,0,0")
+                setWidth("80%")
+                setHeight("100%")
+
+                setState("preview-to-board")
                 return
             }
 
-            let x = drag.current.x + event.movementX
-            let y = drag.current.y + event.movementY
+            if (transitionEnded) {
+                setTransitionEnded(false)
+                setState("preview")
+            }
+        },
 
-            drag.current = {x: x, y: y}
-
-            if (Math.abs(y) > stackSpacing) {
-                if (props.shift(-y > 1 ? 1 : -1)) drag.current = {x: drag.current.x, y: 0}
+        "preview": () => {
+            if (pointer === "out") {
+                setX(x + previewDistance)
+                setY(y - previewDistance)
+                setState("preview-to-stack")
             }
 
-            // dragging.current && setStyle({
-            // console.log(styleRef.current.transition)
-            setStyle({
-                ...style,
-                opacity: 1,
-                zIndex: 10 + Math.floor(offsetRef.current / stackSpacing),
-                transition: "",
-                transform: `translate(${props.stackState.x - previewDistance + x}px, ${props.stackState.y + previewDistance - offsetRef.current + (y)}px) rotate3d(${stackRotation})`
-            })
-        }
-    }
+            if (props.stackPosition !== stackPosition) {
+                setStackPosition(props.stackPosition)
+                setZIndex(10 + props.stackPosition)
+            }
 
-    function handlePointerUp(event) {
-        // console.log(stateRef.current, drag.current.x, stateRef.current === "drag" && drag.current.x < -100, id)
-        // if (id === 6) console.log("up")
-        if (stateRef.current === "drag" && drag.current.x < -100) {
+
+            if (pointer === "up" && !props.locked) {
+                setPointer("in") // maybe in ?
+
+                props.clickHandler()
+                props.lock()
+
+                setTransition(boardTransition)
+                setX(0)
+                setY(0)
+                setZIndex(1)
+                setRotation("0,0,0,0")
+                setWidth("80%")
+                setHeight("100%")
+
+                setState("preview-to-board")
+            }
+
+            if (pointer === "move" && lastPointer.current === "down") {
+                // setPointerDown(false)
+                setState("preview-to-drag")
+            }
+        },
+
+        "drag": () => {
+            if (pointer === "up") {
+                setPointer("out")
+
+                props.unlock()
+
+                setTransition(stackTransition)
+                setX(props.stackState.x)
+                setY(props.stackState.y - stackPosition*stackSpacing)
+
+                setState("drag-to-stack")
+            }
+
+            if (props.stackPosition !== stackPosition) {
+                setStackPosition(props.stackPosition)
+                setZIndex(10 + props.stackPosition)
+            }
+
+            if (pointer === "move") {
+                setPointer("down")
+
+                let dx = x + drag.current.x - props.stackState.x
+                let dy = y + drag.current.y - props.stackState.y - previewDistance
+
+                setX(x + drag.current.x)
+                setY(y + drag.current.y)
+
+                drag.current = {x:0, y:0}
+
+                let dyRelative = dy + stackPosition*stackSpacing
+
+                if (Math.abs(dyRelative) > stackSpacing) {
+                    props.shift(dyRelative > 1 ? -1 : 1)
+                }
+
+            }
+        },
+
+        "drag-to-stack": () => {
+            if (transitionEnded) {
+                setTransitionEnded(false)
+                setState("stack")
+            }
+        },
+
+        "preview-to-drag": () => {
+            props.lock()
+            setTransition("")
+            setState("drag")
+        },
+
+        "preview-to-stack": () => {
+            if (transitionEnded) {
+                setTransitionEnded(false)
+                setTransition(stackTransition)
+                setState("stack")
+            }
+        },
+
+        "preview-to-board": () => {
             // debugger
-            drag.current = {x: 0, y: 0}
-            pointerDown.current = false
-            dragging.current = false
-            props.unlock()
-            props.clickHandler()
-        }
-        else if (stateRef.current === "drag") {
-            drag.current = {x: 0, y: 0}
-            dragging.current = false
-            setState("before-drag-to-stack")
-            props.unlock()
-            pointerDown.current = false
-        }
-        else if (["preview", "stack-to-preview"].indexOf(stateRef.current) > -1) {
-            props.clickHandler()
+            if (transitionEnded) {
+                setTransitionEnded(false)
+                props.unlock()
+                setState("board")
+            }
+        },
+
+        "board": () => {
+            if (!props.isActive) {
+                // setOpacity(1)
+                // setZIndex(10 + stackPosition)
+                setZIndex(10 + props.stackPosition)
+                setWidth("170px")
+                setHeight("170px")
+
+                setX(props.stackState.x)
+                // setY(props.stackState.y - stackPosition*stackSpacing)
+                setY(props.stackState.y - props.stackPosition*stackSpacing)
+                setRotation(stackRotation)
+
+                setState("board-to-stack")
+            }
+
+        },
+
+        "board-to-stack": () => {
+            if (transitionEnded) {
+                setTransitionEnded(false)
+                setTransition(stackTransition)
+                setState("stack")
+            }
         }
 
     }
 
+    function pointerMoveHandler(event) {
+        if (stateRef.current === "drag") {
+            setPointer("move")
+            drag.current = {x: event.movementX, y: event.movementY}
+        } else if (["in", "down"].indexOf(pointerRef.current) > - 1) {
+            setPointer("move")
+        }
+    }
 
+    function pointerUpHandler() {
+        if (["drag", "preview"].indexOf(stateRef.current) > -1) setPointer("up")
+    }
 
     useEffect(() => {
-        window.addEventListener("pointermove", handlePointerMove)
-        window.addEventListener("pointerup", handlePointerUp)
+        window.addEventListener("pointermove", pointerMoveHandler)
+        window.addEventListener("pointerup", pointerUpHandler)
+
         return () => {
-            window.removeEventListener("pointermove", handlePointerMove)
-            window.removeEventListener("pointerup", handlePointerUp)
+            window.removeEventListener("pointermove", pointerMoveHandler)
+            window.removeEventListener("pointerup", pointerUpHandler)
         }
     }, [])
 
-    if (props.stackPosition !== prevPosition) {
-        setOffset(props.stackPosition * stackSpacing)
-        setPrevPosition(props.stackPosition)
-    }
-
-    switch (state) {
-        case "stack":
-            if (props.isActive) setState("before-stack-to-board")
-
-            if (props.stackPosition !== prevPosition) {
-                setOffset(props.stackPosition*stackSpacing)
-                setPrevPosition(props.stackPosition)
-
-                setStyle({
-                    ...style,
-                    transform: `translate(${props.stackState.x}px, ${props.stackState.y - props.stackPosition*stackSpacing}px) rotate3d(${stackRotation})`,
-                    opacity: stackOpacity,
-                    zIndex: 10 + props.stackPosition
-                })
-            }
-
-            if (props.dim !== prevDim) {
-                setPrevDim(props.dim)
-                setStyle({
-                    ...style,
-                    opacity: props.dim ? dimOpacity : stackOpacity
-                })
-            }
-            break
-
-        case "before-stack-to-preview":
-            setStyle({
-                ...style,
-                transform: `translate(${props.stackState.x - previewDistance}px, ${props.stackState.y - offset + previewDistance}px) rotate3d(${stackRotation})`,
-                opacity: 1,
-                // cursor: "move",
-            })
-            setState("stack-to-preview")
-
-            break
-
-        case "stack-to-preview":
-            break
-
-        case "before-preview":
-
-
-        case "preview":
-            if (props.isActive) setState("before-stack-to-board")
-            break
-
-        case "before-preview-to-stack":
-            setStyle({
-                ...style,
-                transform: `translate(${props.stackState.x}px, ${props.stackState.y - offset}px) rotate3d(${stackRotation})`,
-                opacity: prevDim ? dimOpacity : stackOpacity
-            })
-            setState("preview-to-stack")
-            break
-
-        case "preview-to-stack":
-            break
-
-        case "stack-to-new-position":
-            setStyle({
-                ...style,
-                transform: `translate(${props.stackState.x}px, ${props.stackState.y - offset}px) rotate3d(${stackRotation})`,
-            })
-            break
-
-        case "stack-to-drag":
-            setStyle({
-                ...style,
-                transition: "",
-            })
-            setState("drag")
-            break
-
-        case "drag":
-            if (props.stackPosition !== prevPosition) {
-                setOffset(props.stackPosition * stackSpacing)
-                setPrevPosition(props.stackPosition)
-            }
-            if (props.isActive) setState("before-stack-to-board")
-            break
-
-        case "before-drag-to-stack":
-            setStyle({
-                ...style,
-                transform: `translate(${props.stackState.x}px, ${props.stackState.y - props.stackPosition*stackSpacing}px) rotate3d(${stackRotation})`,
-                transition: dragTransition,
-                opacity: stackOpacity,
-                zIndex: 10 + props.stackPosition
-            })
-            setState("drag-to-stack")
-            break
-
-        case "drag-to-stack":
-            break
-
-
-        case "before-stack-to-board":
-            setStyle({
-                ...style,
-                transition: boardTransition
-            })
-
-            pointerDown.current = false
-
-            setState("go-stack-to-board")
-            break
-
-        case "go-stack-to-board":
-            setStyle({
-                ...style,
-                width: '70%',
-                height: '100%',
-                zIndex: 1,
-                transform: 'translate(0px, 0px) translateZ(-1000px)',
-            })
-            setState("stack-to-board")
-            break
-
-        case "stack-to-board":
-            if (!props.isActive) setState("before-board-to-stack")
-            break
-
-        case "before-board":
-            setState("board")
-            break
-
-        case "board":
-            if (!props.isActive) setState("before-board-to-stack")
-            if (props.stackPosition !== prevPosition) {
-                setOffset(props.stackPosition * stackSpacing)
-                setPrevPosition(props.stackPosition)
-            }
-            break
-
-        case "before-board-to-stack":
-            setStyle({
-                ...defaultStyle,
-                transition: boardTransition,
-                zIndex: 999,
-            })
-            setState("board-to-stack")
-            break
-
-        case "board-to-stack":
-            break
-
-        case "before-stack":
-            setStyle({
-                ...style,
-                transition: stackTransition
-            })
-            setState("stack")
-            break
-
-        default:
-            alert("wrong state")
-            break
-    }
+    useEffect(() => {
+        console.log(`Card ${id} re-rendered to state: ${state}`)
+        states[state]()
+    })
 
 
     return (
         <div className="Card"
-             style={style}
+             // style={style}
+             style={{
+                 transform: `translate(${x}px, ${y}px) rotate3d(${rotation})`,
+                 width: width,
+                 height: height,
+                 opacity: opacity,
+                 zIndex: zIndex,
+                 transition: transition,
+                 ...props.content.background
+             }}
+
+             onPointerEnter={() => {
+                 if (pointer !== "in") setPointer("in")
+             }}
 
              onPointerDown={() => {
-                 if (["stack", "preview"].indexOf(state) > -1) {
-                     pointerDown.current = true
-                }
+                 if (pointer !== "down") setPointer("down")
              }}
 
-             onMouseMove={() => {
-                 if (!props.locked && state === "stack") {
-                     props.preview()
-                     setState("before-stack-to-preview")
-                 }
+             onPointerLeave={() => {
+                 if (pointer !== "out") setPointer("out")
              }}
-             onMouseLeave={() => {
-                 if (["preview", "stack-to-preview"].indexOf(state) > -1) {
-                     props.unpreview()
-                     setState("before-preview-to-stack")
-                 }
-             }}
+
              onTransitionEnd={() => {
-                 switch (state) {
-                     case "stack-to-board":
-                         setState("before-board")
-                         break
-                     case "board-to-stack":
-                         setState("before-stack")
-                         break
-                     case "stack-to-preview":
-                         setState("preview")
-                         break
-                     case "preview-to-stack":
-                         setState("stack")
-                         break
-                     case "drag-to-stack":
-                         setState("before-stack")
-                         break
-                     default:
-                         break
-                 }
-
-            }}
+                 setTransitionEnded(true)
+             }}
         >
-            {id}
+
+            <div className="body">
+
+            </div>
 
 
             <div className="bottom">
                 <div className="wrapper">
-                    {props.content.text}
+                    {id} {props.content.text}
                 </div>
             </div>
         </div>
