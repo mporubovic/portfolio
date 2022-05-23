@@ -1,6 +1,12 @@
 import './Card.css'
 import {useEffect, useRef, useState} from "react";
 
+import AboutMe from "../Cards/AboutMe/AboutMe";
+
+const components = {
+    AboutMe: AboutMe
+}
+
 export default function Card(props) {
     const id = props.id
     const stackSpacing = 35
@@ -10,7 +16,8 @@ export default function Card(props) {
 
     const stackTransition = 'transform 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
     const previewTransition = 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
-    const boardTransition = 'all 1.5s'
+    // const boardTransition = 'all 1.5s'
+    const boardTransition = 'width 1.5s, height 1.5s, transform 1.5s'
 
     const dimOpacity = 0.35
     const stackOpacity = 1
@@ -24,6 +31,7 @@ export default function Card(props) {
 
     const [x, setX] = useState(0)
     const [y, setY] = useState(0)
+    const [z, setZ] = useState(0)
     const [rotation, setRotation] = useState("")
 
     const [stackPosition, setStackPosition] = useState(0)
@@ -50,6 +58,8 @@ export default function Card(props) {
     }
     const lastPointer = useRef("")
 
+    const [backgroundBlur, setBackgroundBlur] = useState("")
+
     const states = {
         "initial": () => {
             setOpacity(1)
@@ -72,6 +82,7 @@ export default function Card(props) {
                 setTransition(previewTransition)
                 setX(x - previewDistance)
                 setY(y + previewDistance)
+                // props.preview()
                 setState("stack-to-preview")
             }
 
@@ -86,6 +97,11 @@ export default function Card(props) {
                 setTransitionEnded(false)
             }
 
+            if (props.dim !== dim) {
+                setDim(props.dim)
+                setOpacity(props.dim ? dimOpacity : stackOpacity)
+            }
+
         },
 
         "stack-to-preview": () => {
@@ -96,12 +112,13 @@ export default function Card(props) {
                 props.lock()
 
                 setTransition(boardTransition)
-                setX(0)
-                setY(0)
-                setZIndex(1)
-                setRotation("0,0,0,0")
+                setX(20)
+                setY(20)
+                setZIndex(1000)
+                setZ(-1000)
+                setRotation(null)
                 setWidth("80%")
-                setHeight("100%")
+                setHeight("95%")
 
                 setState("preview-to-board")
                 return
@@ -117,7 +134,9 @@ export default function Card(props) {
             if (pointer === "out") {
                 setX(x + previewDistance)
                 setY(y - previewDistance)
+                // props.unpreview()
                 setState("preview-to-stack")
+
             }
 
             if (props.stackPosition !== stackPosition) {
@@ -133,18 +152,21 @@ export default function Card(props) {
                 props.lock()
 
                 setTransition(boardTransition)
-                setX(0)
-                setY(0)
-                setZIndex(1)
-                setRotation("0,0,0,0")
+                setX(20)
+                setY(20)
+                setZIndex(1000)
+                setZ(-1000)
+                setRotation(null)
                 setWidth("80%")
-                setHeight("100%")
+                setHeight("95%")
+
 
                 setState("preview-to-board")
             }
 
             if (pointer === "move" && lastPointer.current === "down") {
                 // setPointerDown(false)
+                // props.unpreview()
                 setState("preview-to-drag")
             }
         },
@@ -213,22 +235,32 @@ export default function Card(props) {
             if (transitionEnded) {
                 setTransitionEnded(false)
                 props.unlock()
+                // setZIndex(100)
+                setBackgroundBlur("10px")
+                setZIndex(1)
                 setState("board")
             }
         },
 
         "board": () => {
+            if (transitionEnded) {
+                setTransitionEnded(false)
+            }
+
             if (!props.isActive) {
                 // setOpacity(1)
                 // setZIndex(10 + stackPosition)
+                setTransition(boardTransition)
                 setZIndex(10 + props.stackPosition)
                 setWidth("170px")
                 setHeight("170px")
+                setZ(0)
 
                 setX(props.stackState.x)
                 // setY(props.stackState.y - stackPosition*stackSpacing)
                 setY(props.stackState.y - props.stackPosition*stackSpacing)
                 setRotation(stackRotation)
+                // setBackgroundBlur("")
 
                 setState("board-to-stack")
             }
@@ -239,6 +271,7 @@ export default function Card(props) {
             if (transitionEnded) {
                 setTransitionEnded(false)
                 setTransition(stackTransition)
+                setBackgroundBlur("")
                 setState("stack")
             }
         }
@@ -273,12 +306,14 @@ export default function Card(props) {
         states[state]()
     })
 
+    const CardContent = components[props.content.component]
+
 
     return (
         <div className="Card"
-             // style={style}
              style={{
-                 transform: `translate(${x}px, ${y}px) rotate3d(${rotation})`,
+                 transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""} ${z ? `translateZ(${z}px)` : ""}`,
+                 // transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""}`,
                  width: width,
                  height: height,
                  opacity: opacity,
@@ -299,13 +334,17 @@ export default function Card(props) {
                  if (pointer !== "out") setPointer("out")
              }}
 
-             onTransitionEnd={() => {
-                 setTransitionEnded(true)
+             onTransitionEnd={(e) => {
+                 if (e.propertyName !== "backdrop-filter") setTransitionEnded(true)
              }}
         >
 
-            <div className="body">
-
+            <div className="body" style={{
+                // backdropFilter: `blur(${backgroundBlur})`
+            }}>
+                <div className="content">
+                    { props.content.component && (<CardContent />)}
+                </div>
             </div>
 
 

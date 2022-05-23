@@ -4,7 +4,7 @@
     top: 0;
     user-select: none;
     /*background-color: white;*/
-    border-radius: 10px;
+    border-radius: 15px;
     /*border: 1px solid black;*/
     box-shadow: 0 0 7px 3px #00000054;
     overflow: hidden;
@@ -15,6 +15,19 @@
 
 .body {
     flex: 1;
+    transition: all 1.5s;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    padding: 30px;
+}
+
+
+.content {
+    background-color: rgba(0,0,0,0.2);
+    height: 100%;
+    border-radius: 10px;
+
 }
 
 .bottom {
