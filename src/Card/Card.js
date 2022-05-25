@@ -59,6 +59,7 @@ export default function Card(props) {
     const lastPointer = useRef("")
 
     const [backgroundBlur, setBackgroundBlur] = useState("")
+    const [cursor, setCursor] = useState("pointer")
 
     const states = {
         "initial": () => {
@@ -82,8 +83,29 @@ export default function Card(props) {
                 setTransition(previewTransition)
                 setX(x - previewDistance)
                 setY(y + previewDistance)
+                setCursor("grab")
                 // props.preview()
                 setState("stack-to-preview")
+            }
+
+            if (pointer === "down" && !props.locked) {
+                setPointer("in") // maybe in ?
+
+                props.clickHandler()
+                props.lock()
+
+                setTransition(boardTransition)
+                setX(20)
+                setY(20)
+                setZIndex(1000)
+                setZ(-1000)
+                setRotation(null)
+                setWidth("80%")
+                setHeight("95%")
+                setCursor("pointer")
+
+                setState("preview-to-board")
+                return
             }
 
             if (props.stackPosition !== stackPosition) {
@@ -105,24 +127,7 @@ export default function Card(props) {
         },
 
         "stack-to-preview": () => {
-            if (pointer === "down") {
-                setPointer("in") // maybe in ?
 
-                props.clickHandler()
-                props.lock()
-
-                setTransition(boardTransition)
-                setX(20)
-                setY(20)
-                setZIndex(1000)
-                setZ(-1000)
-                setRotation(null)
-                setWidth("80%")
-                setHeight("95%")
-
-                setState("preview-to-board")
-                return
-            }
 
             if (transitionEnded) {
                 setTransitionEnded(false)
@@ -134,6 +139,7 @@ export default function Card(props) {
             if (pointer === "out") {
                 setX(x + previewDistance)
                 setY(y - previewDistance)
+                setCursor("pointer")
                 // props.unpreview()
                 setState("preview-to-stack")
 
@@ -167,6 +173,7 @@ export default function Card(props) {
             if (pointer === "move" && lastPointer.current === "down") {
                 // setPointerDown(false)
                 // props.unpreview()
+                setCursor("grabbing")
                 setState("preview-to-drag")
             }
         },
@@ -180,6 +187,7 @@ export default function Card(props) {
                 setTransition(stackTransition)
                 setX(props.stackState.x)
                 setY(props.stackState.y - stackPosition*stackSpacing)
+                setCursor("pointer")
 
                 setState("drag-to-stack")
             }
@@ -312,6 +320,7 @@ export default function Card(props) {
     return (
         <div className="Card"
              style={{
+                 ...props.content.background,
                  transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""} ${z ? `translateZ(${z}px)` : ""}`,
                  // transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""}`,
                  width: width,
@@ -319,7 +328,7 @@ export default function Card(props) {
                  opacity: opacity,
                  zIndex: zIndex,
                  transition: transition,
-                 ...props.content.background
+                 cursor: cursor,
              }}
 
              onPointerEnter={() => {
@@ -342,9 +351,7 @@ export default function Card(props) {
             <div className="body" style={{
                 // backdropFilter: `blur(${backgroundBlur})`
             }}>
-                <div className="content">
-                    { props.content.component && (<CardContent />)}
-                </div>
+                { props.content.component && (<CardContent />)}
             </div>
 
 
