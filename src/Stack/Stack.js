@@ -2,6 +2,8 @@ import './Stack.css'
 import Card from "../Card/Card";
 import {useEffect, useRef, useState} from "react";
 
+// Gradient credits:  https://gradienta.io
+
 const __cards = [
     {text: "About Me", component: 'AboutMe', background: {background: "linear-gradient(115deg, rgb(0, 0, 0) 0%, rgb(0, 197, 8) 55%, rgb(0, 0, 0) 100%), linear-gradient(115deg, rgb(0, 87, 255) 0%, rgb(5 3 160) 100%), conic-gradient(from 110deg at -5% 35%, rgb(0 0 0) 0deg, rgb(250, 255, 0) 360deg), conic-gradient(from 220deg at 30% 30%, rgb(255, 0, 0) 0deg, rgb(0, 0, 255) 220deg, rgb(23 0 162) 360deg), conic-gradient(from 235deg at 60% 35%, rgb(0, 137, 215) 0deg, rgb(0, 0, 255) 180deg, rgb(36, 0, 96) 360deg)",
 backgroundBlendMode: "soft-light, soft-light, overlay, screen, normal"}},
@@ -137,6 +139,10 @@ export default function Stack() {
         console.log(event)
         if (event.key === "Escape") returnCard(boardCardsRef.current[0])
     }
+
+    useEffect(() => {
+        drawCard(0)
+    }, [])
 
     return (
         <div className="Stack" ref={stackDiv}>

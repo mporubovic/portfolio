@@ -1,0 +1,22 @@
+.ActionButton {
+    background: linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+    padding: 15px 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+    /*border: 1px solid #777777;*/
+    box-shadow: 0 0 18px 0 #1616168f;
+    transition: background 0.5s;
+    text-decoration: none;
+}
+
+.ActionButton:hover {
+    background: linear-gradient(152.97deg, rgba(0, 117, 255, 0.2) 0%, rgba(0, 102, 255, 0.465) 100%);
+}
+
+.ActionButton img {
+    height: 20px;
+}

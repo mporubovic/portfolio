@@ -88,7 +88,7 @@ export default function Card(props) {
                 setState("stack-to-preview")
             }
 
-            if (pointer === "down" && !props.locked) {
+            if ((pointer === "down" && !props.locked) || props.isActive) {
                 setPointer("in") // maybe in ?
 
                 props.clickHandler()
@@ -322,6 +322,7 @@ export default function Card(props) {
              style={{
                  ...props.content.background,
                  transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""} ${z ? `translateZ(${z}px)` : ""}`,
+                 // TODO: implement scaling instead of width/height for more efficient rendering
                  // transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""}`,
                  width: width,
                  height: height,
