@@ -11,6 +11,7 @@
     box-shadow: 0 0 18px 0 #1616168f;
     transition: background 0.5s;
     text-decoration: none;
+    gap: 15px;
 }
 
 .ActionButton:hover {
@@ -18,5 +19,4 @@
 }
 
 .ActionButton img {
-    height: 20px;
 }

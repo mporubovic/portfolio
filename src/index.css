@@ -3,3 +3,20 @@ html, * {
     padding: 0;
     font-family: Helvetica, sans-serif;
 }
+
+body {
+    background-color: #343434;
+}
+
+.content-card {
+    background: linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
+    border-radius: 15px;
+    /*border: 1px solid #777777;*/
+    box-shadow: 0 0 18px 0 #1616168f;
+}

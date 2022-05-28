@@ -1,6 +1,7 @@
 import styles from './AboutMe.module.css'
 import pfp from './pfp.png'
-import ActionButton from "../common/ActionButton";
+import ActionButton from "../common/ActionButton/ActionButton";
+import Icons from "../common/Icons/Icons";
 
 const name = "Matej Porubovic"
 
@@ -58,117 +59,177 @@ const icons = {
     linkedin: require('./icons/linkedin.svg').default,
     github: require('./icons/github.svg').default,
 
+    cards: {
+        cube: require('./icons/cards/cube.svg').default,
+        dsoc: require('./icons/cards/dsoc.svg').default,
+        mylayr: require('./icons/cards/mylayr.svg').default,
+        stack: require('./icons/cards/stack.svg').default,
+    },
+
+    figma: require("./icons/figma.svg").default,
+    camera: require("./icons/camera.svg").default,
+    document: require("./icons/document.svg").default,
+    link: require("./icons/link.svg").default,
+    printer: require("./icons/printer.svg").default,
+    touchpad: require("./icons/touchpad.svg").default,
+
+
 }
 
-export default function AboutMe() {
+export default function AboutMe(props) {
 
     return (
         <div className={styles.AboutMe}>
-            <div className={styles.sectionA}>
-                <div className={styles.card} style={{
+            <div className={styles.sectionABackground}>
 
-                }}>
-                    <img src={pfp} style={{
-                        height: "60px"
-                    }} />
-                    <h1 style={{
-                        marginLeft: "20px"
+                <div className={styles.sectionA}>
+                    <div className="content-card">
+                        <img src={pfp} style={{
+                            height: "60px"
+                        }} />
+                        <h1 style={{
+                            marginLeft: "20px"
+                        }}>
+                            {name}
+                        </h1>
+                    </div>
+
+                    <div className="content-card" style={{
+                        flexDirection: "column",
+                        gap: "20px",
+                        textAlign: "justify",
+                        alignItems: "flex-start",
                     }}>
-                        {name}
-                    </h1>
+                        { text.map((t, i) => (
+                            <span key={i}>{t}</span>
+                        )) }
+                    </div>
+
+                    <div style={{
+                        display: "flex",
+                        gap: "15px",
+                        flexDirection: "column"
+                    }}>
+                        <Icons icons={icons.web} height="30px" />
+
+                        <Icons icons={icons.programming} height="20px" />
+
+                        <Icons icons={icons.tools} height="20px" />
+                    </div>
+
                 </div>
 
-                <div className={styles.card} style={{
-                    flexDirection: "column",
-                    gap: "20px",
-                    textAlign: "justify",
-                    alignItems: "flex-start"
-                }}>
-                    { text.map((t, i) => (
-                        <span key={i}>{t}</span>
-                    )) }
-                </div>
-
-                <div className={styles.card}>
-                    {
-                        icons.web.map((w, i) => (
-                            <img key={i} src={w} style={{
-                                height: "30px"
-                            }}  />
-                        ))
-                    }
-                </div>
-
-                <div className={styles.card}>
-                    {
-                        icons.programming.map((p, i) => (
-                            <img key={i} src={p} style={{
-                                height: "20px"
-                            }}  />
-                        ))
-                    }
-                </div>
-
-                <div className={styles.card}>
-                    {
-                        icons.tools.map((t, i) => (
-                            <img key={i} src={t} style={{
-                                height: "20px"
-                            }}  />
-                        ))
-                    }
-                </div>
             </div>
 
-            <div className={styles.sectionB}>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px"
-                }}>
-                    <ActionButton
-                        style={{ flex: "auto" }}
-                        target={false}
-                        icon={icons.phone}
-                        text={phone}
-                        href={phoneHref}
-                    />
+            <div className={styles.sectionBBackground}>
+                <div className={styles.sectionB}>
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr auto auto",
+                        gridTemplateRows: "auto auto",
+                        gap: "10px"
+                    }}>
 
-                    <ActionButton
-                        icon={icons.linkedin}
-                        href={linkedin}
-                    />
+                        <ActionButton target={false} icon={icons.phone} text={phone} href={phoneHref}
+                                      style={{ flex: "auto", gridArea: "1 / 1 / 2 / 2" }}
+                        />
 
-                    <ActionButton
-                        icon={icons.discord}
-                        href={discord}
-                    />
+                        <ActionButton icon={icons.linkedin} href={linkedin}
+                                      style={{ gridArea: "1 / 2 / 2 / 3" }}
+                        />
 
+                        <ActionButton icon={icons.discord} href={discord}
+                                      style={{ gridArea: "1 / 3 / 2 / 4" }}
+                        />
+
+                        <ActionButton target={false} icon={icons.email} text={email} href={emailHref}
+                                      style={{ flex: "auto", gridArea: "2 / 1 / 3 / 2" }}
+                        />
+
+                        <ActionButton text="CV" href={cv}
+                                      style={{ gridArea: "2 / 2 / 3 / 3" }}
+                        />
+
+                        <ActionButton icon={icons.github} href={github}
+                                      style={{ gridArea: " 2 / 3 / 2 / 4" }}
+                        />
+
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplate: "1fr 1fr / 1fr 1fr",
+                        gap: "15px"
+                    }}>
+
+
+
+                        <ActionButton icon={icons.cards.cube}
+                                      iconSize="50px"
+                                      text="Cube"
+                                      flexDirection="column"
+                                      callback={() => props.stackContext.drawCard(2)}
+                        />
+
+                        <ActionButton icon={icons.cards.mylayr}
+                                      iconSize="50px"
+                                      text="Tutoring App"
+                                      flexDirection="column"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+
+                        <ActionButton icon={icons.cards.dsoc}
+                                      iconSize="50px"
+                                      text="dSoc website"
+                                      flexDirection="column"
+                                      callback={() => props.stackContext.drawCard(3)}
+                        />
+
+                        <ActionButton icon={icons.figma}
+                                      iconSize="50px"
+                                      text="dSoc designs"
+                                      flexDirection="column"
+                                      callback={() => props.stackContext.drawCard(1)}
+                        />
+
+
+                    </div>
+
+                    <div style={{
+                        display: "grid",
+                        gridTemplate: "1fr 1fr / 1fr 1fr",
+                        gap: "15px"
+                    }}>
+
+                        <ActionButton icon={icons.touchpad}
+                                      text="JS zoom/pan"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+
+                        <ActionButton icon={icons.camera}
+                                      text="Photography"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+
+                        <ActionButton icon={icons.printer}
+                                      text="3D printing"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+
+                        <ActionButton icon={icons.link}
+                                      text="Links"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+
+                        <ActionButton icon={icons.document}
+                                      text="WIP"
+                                      callback={() => props.stackContext.drawCard(4)}
+                        />
+                    </div>
                 </div>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px"
 
-                }}>
-                    <ActionButton
-                        style={{ flex: "auto" }}
-                        target={false}
-                        icon={icons.email}
-                        text={email}
-                        href={emailHref}
-                    />
 
-                    <ActionButton
-                        text="CV"
-                        href={cv}
-                    />
 
-                    <ActionButton
-                        icon={icons.github}
-                        href={github}
-                    />
-                </div>
             </div>
         </div>
     )
