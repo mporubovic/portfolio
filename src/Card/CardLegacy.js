@@ -339,7 +339,7 @@ export default function CardLegacy(props) {
             {id}
 
 
-            <div className="bottom">
+            <div className="label">
                 <div className="wrapper">
                     {props.content.text}
                 </div>

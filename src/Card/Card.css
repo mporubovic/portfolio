@@ -9,7 +9,12 @@
     box-shadow: 0 0 7px 3px #00000054;
     overflow: hidden;
     flex-direction: column;
+}
 
+@media screen and (max-width: 1000px) {
+    .Card {
+        /*width: 100%;*/
+    }
 }
 
 .body {
@@ -19,11 +24,12 @@
 }
 
 
-.bottom {
+.label {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
+    /*top: 90%;*/
     height: 30px;
 
     display: flex;

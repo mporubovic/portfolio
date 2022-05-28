@@ -9,18 +9,36 @@ const components = {
 
 export default function Card(props) {
     const id = props.id
-    const stackSpacing = 35
-
-    const stackRotation = '30,-6,18,45deg'
-    const previewDistance = 15
-
-    const stackTransition = 'transform 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
-    const previewTransition = 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
-    // const boardTransition = 'all 1.5s'
-    const boardTransition = 'width 1.5s, height 1.5s, transform 1.5s'
 
     const dimOpacity = 0.35
-    const stackOpacity = 1
+    const [mobile, setMobile] = useState(window.innerWidth <= 500)
+
+    const constants = {
+        stack: {
+            xOffset: 250,
+            yOffset: 200,
+            spacing: 35,
+            opacity: 1,
+            width: "170px",
+            height: "170px",
+            rotation: "30,-6,18,45deg",
+            transition: 'transform 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
+        },
+
+        preview: {
+            distance: 15,
+            transition: 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)',
+        },
+
+        board: {
+            width: 0.80,
+            mobile_width: 0.95,
+            height: 0.95,
+            mobile_height: 0.95,
+            transition: 'width 1.5s, height 1.5s, transform 1.5s',
+        }
+
+    }
 
     const [opacity, setOpacity] = useState(0)
     const [zIndex, setZIndex] = useState(0)
@@ -34,11 +52,16 @@ export default function Card(props) {
     const [z, setZ] = useState(0)
     const [rotation, setRotation] = useState("")
 
-    const [stackPosition, setStackPosition] = useState(0)
+    const [stackPosition, _setStackPosition] = useState(0)
+    const stackPositionRef = useRef(0)
+    const setStackPosition = (val) => {
+        stackPositionRef.current = val
+        _setStackPosition(val)
+    }
     // const [prevStackPosition, setPrevStackPosition] = useState(0)
     const [dim, setDim] = useState(false)
 
-    const drag = useRef({x: 0, y: 0})
+    const dragDelta = useRef({x: 0, y: 0})
 
     const [state, _setState] = useState("initial")
     const stateRef = useRef(state)
@@ -60,19 +83,18 @@ export default function Card(props) {
 
     const [backgroundBlur, setBackgroundBlur] = useState("")
     const [cursor, setCursor] = useState("pointer")
+    const ctrlKeyDown = useRef(false)
 
     const states = {
         "initial": () => {
             setOpacity(1)
             setZIndex(10 + props.stackPosition)
-            setWidth("170px")
-            setHeight("170px")
 
-            setX(props.stackState.x)
-            setY(props.stackState.y - props.stackPosition*stackSpacing)
-            setRotation(stackRotation)
+            setRotation(constants.stack.rotation)
             setStackPosition(props.stackPosition)
-            setTransition(stackTransition)
+            setTransition(constants.stack.transition)
+
+            resize("stack")
 
             setState("stack")
         },
@@ -80,29 +102,26 @@ export default function Card(props) {
         "stack": () => {
             if (pointer === "move" && !props.locked) {
                 setPointer("in")
-                setTransition(previewTransition)
-                setX(x - previewDistance)
-                setY(y + previewDistance)
-                setCursor("grab")
+                setTransition(constants.preview.transition)
+                setX(x - constants.preview.distance)
+                setY(y + constants.preview.distance)
                 // props.preview()
                 setState("stack-to-preview")
             }
 
             if ((pointer === "down" && !props.locked) || props.isActive) {
-                setPointer("in") // maybe in ?
+                setPointer("in")
 
                 props.clickHandler()
                 props.lock()
 
-                setTransition(boardTransition)
-                setX(20)
-                setY(20)
+                setTransition(constants.board.transition)
+
                 setZIndex(1000)
                 setZ(-1000)
                 setRotation(null)
-                setWidth("80%")
-                setHeight("95%")
-                setCursor("pointer")
+
+                resize("board")
 
                 setState("preview-to-board")
                 return
@@ -110,8 +129,7 @@ export default function Card(props) {
 
             if (props.stackPosition !== stackPosition) {
                 setStackPosition(props.stackPosition)
-                // setTransition(stackTransition)
-                setY(props.stackState.y - props.stackPosition*stackSpacing)
+                setY(window.innerHeight - constants.stack.yOffset - props.stackPosition*constants.stack.spacing)
                 setZIndex(10 + props.stackPosition)
             }
 
@@ -121,7 +139,7 @@ export default function Card(props) {
 
             if (props.dim !== dim) {
                 setDim(props.dim)
-                setOpacity(props.dim ? dimOpacity : stackOpacity)
+                setOpacity(props.dim ? dimOpacity : constants.stack.opacity)
             }
 
         },
@@ -137,9 +155,8 @@ export default function Card(props) {
 
         "preview": () => {
             if (pointer === "out") {
-                setX(x + previewDistance)
-                setY(y - previewDistance)
-                setCursor("pointer")
+                setX(x + constants.preview.distance)
+                setY(y - constants.preview.distance)
                 // props.unpreview()
                 setState("preview-to-stack")
 
@@ -152,28 +169,22 @@ export default function Card(props) {
 
 
             if (pointer === "up" && !props.locked) {
-                setPointer("in") // maybe in ?
+                setPointer("in")
 
                 props.clickHandler()
                 props.lock()
 
-                setTransition(boardTransition)
-                setX(20)
-                setY(20)
+                setTransition(constants.board.transition)
                 setZIndex(1000)
                 setZ(-1000)
                 setRotation(null)
-                setWidth("80%")
-                setHeight("95%")
 
-
+                resize("board")
                 setState("preview-to-board")
             }
 
-            if (pointer === "move" && lastPointer.current === "down") {
-                // setPointerDown(false)
+            if (pointer === "move" && lastPointer.current === "down" && ctrlKeyDown.current) {
                 // props.unpreview()
-                setCursor("grabbing")
                 setState("preview-to-drag")
             }
         },
@@ -184,10 +195,9 @@ export default function Card(props) {
 
                 props.unlock()
 
-                setTransition(stackTransition)
-                setX(props.stackState.x)
-                setY(props.stackState.y - stackPosition*stackSpacing)
-                setCursor("pointer")
+                setTransition(constants.stack.transition)
+                setX(window.innerWidth - constants.stack.xOffset)
+                setY(window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing)
 
                 setState("drag-to-stack")
             }
@@ -200,18 +210,18 @@ export default function Card(props) {
             if (pointer === "move") {
                 setPointer("down")
 
-                let dx = x + drag.current.x - props.stackState.x
-                let dy = y + drag.current.y - props.stackState.y - previewDistance
+                let originalY = window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing
 
-                setX(x + drag.current.x)
-                setY(y + drag.current.y)
+                let dx = x + dragDelta.current.x - props.stackContext.x
+                let dy = y - originalY
 
-                drag.current = {x:0, y:0}
+                setX(x + dragDelta.current.x)
+                setY(y + dragDelta.current.y)
 
-                let dyRelative = dy + stackPosition*stackSpacing
+                dragDelta.current = {x:0, y:0}
 
-                if (Math.abs(dyRelative) > stackSpacing) {
-                    props.shift(dyRelative > 1 ? -1 : 1)
+                if (Math.abs(dy) > constants.stack.spacing) {
+                    props.shift(dy > 1 ? -1 : 1)
                 }
 
             }
@@ -233,7 +243,7 @@ export default function Card(props) {
         "preview-to-stack": () => {
             if (transitionEnded) {
                 setTransitionEnded(false)
-                setTransition(stackTransition)
+                setTransition(constants.stack.transition)
                 setState("stack")
             }
         },
@@ -256,19 +266,17 @@ export default function Card(props) {
             }
 
             if (!props.isActive) {
-                // setOpacity(1)
-                // setZIndex(10 + stackPosition)
-                setTransition(boardTransition)
+                setTransition(constants.board.transition)
                 setZIndex(10 + props.stackPosition)
-                setWidth("170px")
-                setHeight("170px")
                 setZ(0)
 
-                setX(props.stackState.x)
-                // setY(props.stackState.y - stackPosition*stackSpacing)
-                setY(props.stackState.y - props.stackPosition*stackSpacing)
-                setRotation(stackRotation)
-                // setBackgroundBlur("")
+                setRotation(constants.stack.rotation)
+
+                if (props.stackPosition !== stackPosition) {
+                    setStackPosition(props.stackPosition)
+                    setZIndex(10 + props.stackPosition)
+                }
+                resize("stack")
 
                 setState("board-to-stack")
             }
@@ -278,7 +286,7 @@ export default function Card(props) {
         "board-to-stack": () => {
             if (transitionEnded) {
                 setTransitionEnded(false)
-                setTransition(stackTransition)
+                setTransition(constants.stack.transition)
                 setBackgroundBlur("")
                 setState("stack")
             }
@@ -289,7 +297,7 @@ export default function Card(props) {
     function pointerMoveHandler(event) {
         if (stateRef.current === "drag") {
             setPointer("move")
-            drag.current = {x: event.movementX, y: event.movementY}
+            dragDelta.current = {x: event.movementX, y: event.movementY}
         } else if (["in", "down"].indexOf(pointerRef.current) > - 1) {
             setPointer("move")
         }
@@ -299,13 +307,54 @@ export default function Card(props) {
         if (["drag", "preview"].indexOf(stateRef.current) > -1) setPointer("up")
     }
 
+    function resizeHandler() {
+        let mobile = window.innerWidth <= 500
+        setMobile(mobile)
+
+        resize()
+    }
+
+    const resize = (to) => {
+        if ((stateRef.current === "board" && to === undefined) || to === "board") {
+            setX(Math.round(window.innerWidth*(1 - (mobile ? constants.board.mobile_width : constants.board.width))/2))
+            setY(Math.round(window.innerHeight*(1 - (mobile ? constants.board.mobile_height : constants.board.height))/2))
+            setWidth( Math.round(window.innerWidth*(mobile ? constants.board.mobile_width : constants.board.width)) + "px")
+            setHeight(Math.round(window.innerHeight*(mobile ? constants.board.mobile_height : constants.board.height)) + "px")
+        } else {
+            setX(window.innerWidth - constants.stack.xOffset)
+            setY(window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing)
+            setWidth(constants.stack.width)
+            setHeight(constants.stack.height)
+        }
+    }
+
+    function keyDownHandler(event) {
+        if (["Meta", "Control"].indexOf(event.key) > -1) {
+            ctrlKeyDown.current = true
+            setCursor("grabbing")
+        }
+    }
+
+    function keyUpHandler(event) {
+        if (ctrlKeyDown.current) {
+            ctrlKeyDown.current = false
+            setCursor("pointer")
+        }
+    }
+
     useEffect(() => {
         window.addEventListener("pointermove", pointerMoveHandler)
         window.addEventListener("pointerup", pointerUpHandler)
+        window.addEventListener("resize", resizeHandler)
+        window.addEventListener("keydown", keyDownHandler)
+        window.addEventListener("keyup", keyUpHandler)
 
         return () => {
             window.removeEventListener("pointermove", pointerMoveHandler)
             window.removeEventListener("pointerup", pointerUpHandler)
+            window.removeEventListener("resize", resizeHandler)
+            window.removeEventListener("keydown", keyDownHandler)
+            window.removeEventListener("keyup", keyUpHandler)
         }
     }, [])
 
@@ -320,7 +369,7 @@ export default function Card(props) {
     return (
         <div className="Card"
              style={{
-                 ...props.content.background,
+                 // ...props.content.background,
                  transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""} ${z ? `translateZ(${z}px)` : ""}`,
                  // TODO: implement scaling instead of width/height for more efficient rendering
                  // transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""}`,
@@ -352,11 +401,11 @@ export default function Card(props) {
             <div className="body" style={{
                 // backdropFilter: `blur(${backgroundBlur})`
             }}>
-                { props.content.component && (<CardContent />)}
+                { state === "board" && props.content.component && (<CardContent stackContext={props.stackContext} />)}
             </div>
 
 
-            <div className="bottom">
+            <div className="label">
                 <div className="wrapper">
                     {id} {props.content.text}
                 </div>
