@@ -5,7 +5,7 @@ import Icons from "../common/Icons/Icons";
 
 const name = "Matej Porubovic"
 
-const phone = "07539 466503"
+const phone = "+44 7539 466503"
 const phoneHref = "tel:+447539466503"
 
 const email = "matej@porubovic.sk"
