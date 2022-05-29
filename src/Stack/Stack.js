@@ -50,23 +50,23 @@ export default function Stack() {
 
     const [previewCard, setPreviewCard] = useState(-1)
 
-    const [boardCards, _setBoardCards] = useState([])
-    const boardCardsRef = useRef(boardCards)
-    const setBoardCards = (val) => {
-        _setBoardCards(val)
-        boardCardsRef.current = val
+    const [boardCard, _setBoardCard] = useState(-1)
+    const boardCardRef = useRef(boardCard)
+    const setBoardCard = (val) => {
+        _setBoardCard(val)
+        boardCardRef.current = val
     }
 
     const [stackLock, setStackLock] = useState(false)
 
     function drawCard(cardId) {
-        setBoardCards([...boardCardsRef.current, cardId])
+        setBoardCard(cardId)
         setStackCards(stackCardsRef.current.filter(card => card !== cardId))
     }
 
     function returnCard(cardId) {
         let cardsInStack = [...stackCardsRef.current]
-        if (boardCardsRef.current.length === 0 ) return
+        if (boardCardRef.current === -1 ) return
 
         // debugger
 
@@ -75,7 +75,7 @@ export default function Stack() {
 
         cardsInStack.splice(insertionIndex, 0, cardId)
 
-        setBoardCards([...boardCardsRef.current].filter(card => card !== cardId))
+        setBoardCard(-1)
         setStackCards(cardsInStack)
 
 
@@ -83,7 +83,6 @@ export default function Stack() {
 
     function swapCards(cardInStack, cardOnBoard) {
         let cardsInStack = [...stackCardsRef.current]
-        let cardsOnBoard = [...boardCards]
 
         cardsInStack = cardsInStack.filter(card => card !== cardInStack) // remove card from stack
 
@@ -93,9 +92,7 @@ export default function Stack() {
 
         cardsInStack.splice(insertionIndex, 0, cardOnBoard)
 
-        cardsOnBoard = [cardInStack]
-
-        setBoardCards(cardsOnBoard)
+        setBoardCard(cardInStack)
         setStackCards(cardsInStack)
     }
 
@@ -116,8 +113,8 @@ export default function Stack() {
     }
 
     function onCardClick(cardId) {
-        if (boardCardsRef.current.length > 0) {
-            swapCards(cardId, boardCardsRef.current[0])
+        if (boardCardRef.current !== -1) {
+            swapCards(cardId, boardCardRef.current)
         } else {
             drawCard(cardId)
         }
@@ -125,7 +122,7 @@ export default function Stack() {
 
     function onKeyDown(event) {
         console.log(event)
-        if (event.key === "Escape") returnCard(boardCardsRef.current[0])
+        if (event.key === "Escape") returnCard(boardCardRef.current)
     }
 
     useEffect(() => {
@@ -150,7 +147,7 @@ export default function Stack() {
                           unlock={() => setStackLock(false)}
                           locked={stackLock}
 
-                          isActive={boardCards.indexOf(card.id) > -1}
+                          isActive={boardCard === card.id}
                           stackPosition={stackCards.indexOf(card.id)}
                           stackContext={stackContext}
 
