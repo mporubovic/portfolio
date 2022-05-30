@@ -51,6 +51,7 @@ export default function Stack() {
     const [previewCard, setPreviewCard] = useState(-1)
 
     const [boardCard, _setBoardCard] = useState(-1)
+    // const [boardCard, _setBoardCard] = useState(0)
     const boardCardRef = useRef(boardCard)
     const setBoardCard = (val) => {
         _setBoardCard(val)
@@ -125,11 +126,13 @@ export default function Stack() {
         if (event.key === "Escape") returnCard(boardCardRef.current)
     }
 
-    useEffect(() => {
-        setDidMount(true)
-        window.addEventListener("keydown", onKeyDown)
+    function stateChange(id, previous, current) {
+        // console.log(id, previous, current)
+        if (id === 0 && previous === "initial" && current === "initial-to-stack") drawCard(0)
+    }
 
-        drawCard(0)
+    useEffect(() => {
+        window.addEventListener("keydown", onKeyDown)
 
         return () => window.removeEventListener("keydown", onKeyDown)
     }, [])
@@ -137,7 +140,7 @@ export default function Stack() {
     return (
         <>
             {
-                didMount && cards.map(card => (
+                cards.map(card => (
                     <Card key={card.id}
                           id={card.id}
 
@@ -154,6 +157,7 @@ export default function Stack() {
                           preview={() => setPreviewCard(card.id)}
                           unpreview={() => setPreviewCard(-1)}
                           dim={previewCard > -1 && previewCard !== card.id}
+                          stateChange={(previous, current) => stateChange(card.id, previous, current)}
 
                           clickHandler={() => onCardClick(card.id)}
                           shift={(s) => shiftCards(card.id, s)}

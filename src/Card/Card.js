@@ -66,6 +66,7 @@ export default function Card(props) {
     const [state, _setState] = useState("initial")
     const stateRef = useRef(state)
     const setState = (val) => {
+        props.stateChange(stateRef.current, val)
         _setState(val)
         stateRef.current = val
     }
@@ -95,8 +96,24 @@ export default function Card(props) {
             setTransition(constants.stack.transition)
 
             resize("stack")
+            setState("initial-to-stack")
+        },
 
-            setState("stack")
+        "initial-to-stack": () => {
+            if (transitionEnded) {
+                setTransitionEnded(false)
+
+                if (props.isActive) {
+                    setTransition(constants.board.transition)
+                    setZIndex(1000)
+                    setZ(-1000)
+                    setRotation(null)
+
+                    resize("board")
+                    setState("preview-to-board")
+                }
+                else setState("stack")
+            }
         },
 
         "stack": () => {
@@ -112,19 +129,16 @@ export default function Card(props) {
             if ((pointer === "down" && !props.locked) || props.isActive) {
                 setPointer("in")
 
-                props.clickHandler()
+                if (!props.isActive) props.clickHandler()
                 props.lock()
 
                 setTransition(constants.board.transition)
-
                 setZIndex(1000)
                 setZ(-1000)
                 setRotation(null)
 
                 resize("board")
-
                 setState("preview-to-board")
-                return
             }
 
             if (props.stackPosition !== stackPosition) {
@@ -145,8 +159,6 @@ export default function Card(props) {
         },
 
         "stack-to-preview": () => {
-
-
             if (transitionEnded) {
                 setTransitionEnded(false)
                 setState("preview")
