@@ -2,6 +2,7 @@ import styles from './AboutMe.module.css'
 import pfp from './pfp.png'
 import ActionButton from "../common/ActionButton/ActionButton";
 import Icons from "../common/Icons/Icons";
+import icons from "../common/Icons/iconAssets";
 
 const name = "Matej Porubovic"
 
@@ -23,58 +24,8 @@ const text = [
     "I really enjoy web programming, currently perfecting my React skills and learning TypeScript, passion for UI/UX, use Figma a lot.",
     "In my spare time, if I’m not programming or designing, I learn Chinese (普通话) and read books; my favourites are Sapiens and I, Robot.",
     "My programming knowledge is listed below and have a look at some of my projects.",
+    "Pro tip: Command/Ctrl + drag to rearrange cards in the stack"
 ]
-
-const icons = {
-    web: [
-        require('./icons/web/html5.svg').default,
-        require('./icons/web/css3.svg').default,
-        require('./icons/web/js.svg').default,
-        require('./icons/web/react.svg').default,
-        require('./icons/web/vue.svg').default,
-        require('./icons/web/threejs.svg').default,
-        require('./icons/web/nodejs.svg').default
-    ],
-
-    programming: [
-        require('./icons/programming/php.svg').default,
-        require('./icons/programming/mysql.svg').default,
-        require('./icons/programming/laravel.svg').default,
-        require('./icons/programming/java.svg').default,
-        require('./icons/programming/python.svg').default,
-    ],
-
-    tools: [
-        require('./icons/tools/figma.svg').default,
-        require('./icons/tools/photoshop.svg').default,
-        require('./icons/tools/fusion360.png'), // png has no default
-        require('./icons/tools/facebookads.svg').default,
-        require('./icons/tools/googleanalytics.svg').default
-    ],
-
-    phone: require('./icons/phone.svg').default,
-    email: require('./icons/email.svg').default,
-
-    discord: require('./icons/discord.svg').default,
-    linkedin: require('./icons/linkedin.svg').default,
-    github: require('./icons/github.svg').default,
-
-    cards: {
-        cube: require('./icons/cards/cube.svg').default,
-        dsoc: require('./icons/cards/dsoc.svg').default,
-        mylayr: require('./icons/cards/mylayr.svg').default,
-        stack: require('./icons/cards/stack.svg').default,
-    },
-
-    figma: require("./icons/figma.svg").default,
-    camera: require("./icons/camera.svg").default,
-    document: require("./icons/document.svg").default,
-    link: require("./icons/link.svg").default,
-    printer: require("./icons/printer.svg").default,
-    touchpad: require("./icons/touchpad.svg").default,
-
-
-}
 
 export default function AboutMe(props) {
 
@@ -110,11 +61,30 @@ export default function AboutMe(props) {
                         gap: "15px",
                         flexDirection: "column"
                     }}>
-                        <Icons icons={icons.web} height="30px" />
+                        <Icons icons={[
+                            icons.web.html5,
+                            icons.web.css3,
+                            icons.web.js,
+                            icons.web.react,
+                            icons.web.vue,
+                            icons.web.three
+                        ]} height="30px" />
 
-                        <Icons icons={icons.programming} height="20px" />
+                        <Icons icons={[
+                            icons.programming.php,
+                            icons.programming.mysql,
+                            icons.programming.laravel,
+                            icons.programming.java,
+                            icons.programming.python
+                        ]} height="20px" />
 
-                        <Icons icons={icons.tools} height="20px" />
+                        <Icons icons={[
+                            icons.tools.figma,
+                            icons.tools.photoshop,
+                            icons.tools.fusion360,
+                            icons.tools.facebookads,
+                            icons.tools.googleanalytics,
+                        ]} height="20px" />
                     </div>
 
                 </div>
