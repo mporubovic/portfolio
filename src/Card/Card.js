@@ -1,12 +1,6 @@
 import './Card.css'
 import {useEffect, useRef, useState} from "react";
 
-import AboutMe from "../Cards/AboutMe/AboutMe";
-
-const components = {
-    AboutMe: AboutMe
-}
-
 export default function Card(props) {
     const id = props.id
 
@@ -141,7 +135,7 @@ export default function Card(props) {
                 setState("preview-to-board")
             }
 
-            if (props.stackPosition !== stackPosition) {
+            if (props.stackPosition !== stackPosition && props.stackPosition > -1) {
                 setStackPosition(props.stackPosition)
                 setY(window.innerHeight - constants.stack.yOffset - props.stackPosition*constants.stack.spacing)
                 setZIndex(10 + props.stackPosition)
@@ -330,6 +324,9 @@ export default function Card(props) {
         if ((stateRef.current === "board" && to === undefined) || to === "board") {
             setX(Math.round(window.innerWidth*(1 - (mobile ? constants.board.mobile_width : constants.board.width))/2))
             setY(Math.round(window.innerHeight*(1 - (mobile ? constants.board.mobile_height : constants.board.height))/2))
+
+            console.log(Math.round(window.innerWidth*(1 - (mobile ? constants.board.mobile_width : constants.board.width))/2),Math.round(window.innerHeight*(1 - (mobile ? constants.board.mobile_height : constants.board.height))/2))
+
             setWidth( Math.round(window.innerWidth*(mobile ? constants.board.mobile_width : constants.board.width)) + "px")
             setHeight(Math.round(window.innerHeight*(mobile ? constants.board.mobile_height : constants.board.height)) + "px")
         } else {
@@ -375,8 +372,7 @@ export default function Card(props) {
         states[state]()
     })
 
-    const CardContent = components[props.content.component]
-
+    const CardContent = props.content.component
 
     return (
         <div className="Card"

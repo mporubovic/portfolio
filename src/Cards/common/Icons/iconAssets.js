@@ -18,7 +18,6 @@ const icons = {
     },
 
     tools: {
-        figma: require('./icons/tools/figma.svg').default,
         photoshop: require('./icons/tools/photoshop.svg').default,
         fusion360: require('./icons/tools/fusion360.png'), // png has no default
         facebookads: require('./icons/tools/facebookads.svg').default,
@@ -40,11 +39,13 @@ const icons = {
     },
 
     figma: require("./icons/figma.svg").default,
+    figma_white: require("./icons/figma_white.svg").default,
     camera: require("./icons/camera.svg").default,
     document: require("./icons/document.svg").default,
     link: require("./icons/link.svg").default,
     printer: require("./icons/printer.svg").default,
     touchpad: require("./icons/touchpad.svg").default,
+    digitalocean: require('./icons/digitalocean.svg').default,
 }
 
 export default icons

@@ -15,11 +15,15 @@
     .Card {
         /*width: 100%;*/
     }
+
+    .body {
+        overflow-y: scroll !important;
+    }
 }
 
 .body {
     transition: all 1.5s;
-    overflow: scroll;
+    overflow: hidden;
     height: 100%;
 }
 

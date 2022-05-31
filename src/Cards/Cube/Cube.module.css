@@ -1,0 +1,59 @@
+.Cube {
+    display: flex;
+    background: conic-gradient(from 30deg, rgb(53 53 53) 0%, rgb(15 15 15) 33.3%, rgb(38 38 38) 33.4%, rgb(28 28 28) 66.6%, rgb(54 54 54) 66.7%, rgb(33 33 33) 100%, rgb(0 0 0) 100%);
+    /*padding: 10px 0;*/
+}
+
+.sectionA, .sectionB {
+    padding: 50px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+    .Cube {
+        flex-direction: column;
+    }
+
+    .sectionA, .sectionB {
+        padding: 50px 20px;
+    }
+
+    .projectInfo {
+        flex-direction: column;
+    }
+
+    .showcase {
+        flex-direction: column;
+    }
+}
+
+.showcase {
+    display: flex;
+    gap: 20px;
+}
+
+.showcase img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.Cube iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    border-radius: 10px;
+}
+
+.projectInfo {
+    /*display: grid;*/
+    /*grid-template-columns: repeat(4, 1fr);*/
+    display: flex;
+    gap: 10px;
+}
