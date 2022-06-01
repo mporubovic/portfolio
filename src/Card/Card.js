@@ -9,7 +9,7 @@ export default function Card(props) {
 
     const defaults = {
         stack: {
-            xOffset: 250,
+            xOffset: 210,
             yOffset: 200,
             spacing: 35,
             opacity: 1,
@@ -112,6 +112,7 @@ export default function Card(props) {
 
         "stack": () => {
             if (pointer === "move" && !props.locked) {
+                console.log("AAAA")
                 setPointer("in")
                 setTransition(defaults.preview.transition)
                 setX(x - defaults.preview.distance)
@@ -122,6 +123,7 @@ export default function Card(props) {
 
             if ((pointer === "down" && !props.locked) || props.isActive) {
                 setPointer("in")
+                console.log("BBBBB")
 
                 if (!props.isActive) props.clickHandler()
                 props.lock()
@@ -136,16 +138,19 @@ export default function Card(props) {
             }
 
             if (props.stackPosition !== stackPosition && props.stackPosition > -1) {
+                console.log("CCCC")
                 setStackPosition(props.stackPosition)
                 setY(window.innerHeight - defaults.stack.yOffset - props.stackPosition*defaults.stack.spacing)
                 setZIndex(10 + props.stackPosition)
             }
 
             if (transitionEnded) {
+                console.log("DDDDD")
                 setTransitionEnded(false)
             }
 
             if (props.dim !== dim) {
+                console.log("EEEEE")
                 setDim(props.dim)
                 setOpacity(props.dim ? dimOpacity : defaults.stack.opacity)
             }
@@ -250,6 +255,7 @@ export default function Card(props) {
             if (transitionEnded) {
                 setTransitionEnded(false)
                 setTransition(defaults.stack.transition)
+                resize("stack")
                 setState("stack")
             }
         },
@@ -263,6 +269,7 @@ export default function Card(props) {
                 setBackgroundBlur("10px")
                 setZIndex(1)
                 setCursor("default")
+                resize("board")
                 setState("board")
             }
         },
@@ -295,6 +302,8 @@ export default function Card(props) {
                 setTransitionEnded(false)
                 setTransition(defaults.stack.transition)
                 setBackgroundBlur("")
+                resize("stack")
+                setPointer("out")
                 setState("stack")
             }
         }
@@ -318,7 +327,7 @@ export default function Card(props) {
         let mobile = window.innerWidth <= 500
         setMobile(mobile)
 
-        resize()
+        if (!stateRef.current.includes("-to-")) resize()
     }
 
     const resize = (to) => {
@@ -407,15 +416,36 @@ export default function Card(props) {
             <div className="body" style={{
                 // backdropFilter: `blur(${backgroundBlur})`
             }}>
-                { state === "board" && props.content.component && (<CardContent stackContext={props.stackContext} />)}
+                {/*{ state === "board" && props.content.component && (<CardContent stackContext={props.stackContext} />)}*/}
+
+                {
+                     (state === "board" && props.content.component)
+                         ? (<CardContent stackContext={props.stackContext} />)
+                         : (
+                            <div style={{
+                                height: "100%",
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "linear-gradient(48deg, black, #00000054)"
+                            }}>
+                                <img src={props.content.icon} style={{
+                                    height: "70px"
+                                }} />
+
+                            </div>
+                         )
+                }
             </div>
 
 
             <div className="label" style={{
-                backgroundColor: id === 0 ? "white" : "rgba(0,0,0,0.3)",
+                backgroundColor: id === 0 ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.3)",
                 color: id === 0 ? "black" : "white"
             }}>
-                {id} {props.content.text}
+                [{id}] {props.content.text}
             </div>
         </div>
     )

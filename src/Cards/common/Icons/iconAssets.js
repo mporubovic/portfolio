@@ -46,6 +46,8 @@ const icons = {
     printer: require("./icons/printer.svg").default,
     touchpad: require("./icons/touchpad.svg").default,
     digitalocean: require('./icons/digitalocean.svg').default,
+
+    stack: require('./icons/stack.svg').default,
 }
 
 export default icons

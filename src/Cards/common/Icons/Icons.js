@@ -6,7 +6,7 @@ export default function Icons(props) {
         <div className="content-card" style={props.style}>
             {
                 props.icons.map((icon, i) => (
-                    <img key={i} src={icon} style={{
+                    <img className={styles.icon} key={i} src={icon} style={{
                         height: props.height
                     }}  />
                 ))
