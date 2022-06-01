@@ -89,3 +89,18 @@
 
 }
 
+.projectsTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+    color: #919191;
+}
+
+.projectsTitle span {
+    margin: 0 10px;
+}
+
+.projectsTitle hr {
+    border: 1px solid #919191;
+}

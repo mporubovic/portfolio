@@ -25,13 +25,11 @@ export default function dsocWebsite() {
                     sourceLink={githubLink}
                     icons={[
                         icons.web.js,
-                        icons.web.vue,
-                        icons.programming.php,
-                        icons.programming.laravel,
+                        icons.web.react
                     ]}
                 />
 
-                <div className="content-card" style={{flexDirection: "column"}}>
+                <div className="text-card">
 
                     <span>Came up with the design, integrated everyone's opinions</span>
                     <span>Design process can be seen at //Figma</span>

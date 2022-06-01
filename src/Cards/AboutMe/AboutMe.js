@@ -16,6 +16,9 @@ const linkedin = "https://www.linkedin.com/in/matej-porubovic/"
 const github = "https://github.com/mporubovic"
 const discord = "https://discord.com/users/213766571942871041"
 
+const jsZoomPanHref = "https://github.com/mporubovic/zoomable.js"
+const linksHref= "http://links.porubovic.sk/"
+
 const cv = "https://google.com"
 
 const text = [
@@ -83,7 +86,6 @@ export default function AboutMe(props) {
                             icons.figma,
                             icons.tools.photoshop,
                             icons.tools.fusion360,
-                            icons.tools.facebookads,
                             icons.tools.googleanalytics,
                         ]} height="25px" />
                     </div>
@@ -127,43 +129,51 @@ export default function AboutMe(props) {
 
                     </div>
 
-                    <div style={{
-                        display: "grid",
-                        gridTemplate: "1fr 1fr / 1fr 1fr",
-                        gap: "15px"
-                    }}>
+                    <div>
+                        <div className={styles.projectsTitle}>
+                            <hr style={{flex: 1}} />
+                            <span>PROJECTS</span>
+                            <hr style={{flex: 1}} />
+                        </div>
+
+                        <div style={{
+                            display: "grid",
+                            gridTemplate: "1fr 1fr / 1fr 1fr",
+                            gap: "15px"
+                        }}>
 
 
 
-                        <ActionButton icon={icons.cards.cube}
-                                      iconSize="50px"
-                                      text="Cube"
-                                      flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(1)}
-                        />
+                            <ActionButton icon={icons.cards.cube}
+                                          iconSize="50px"
+                                          text="Cube"
+                                          flexDirection="column"
+                                          callback={() => props.stackContext.drawCard(1)}
+                            />
 
-                        <ActionButton icon={icons.cards.mylayr}
-                                      iconSize="50px"
-                                      text="Tutoring App"
-                                      flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(4)}
-                        />
+                            <ActionButton icon={icons.cards.mylayr}
+                                          iconSize="50px"
+                                          text="Tutoring App"
+                                          flexDirection="column"
+                                          callback={() => props.stackContext.drawCard(4)}
+                            />
 
-                        <ActionButton icon={icons.cards.dsoc}
-                                      iconSize="50px"
-                                      text="dSoc website"
-                                      flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(2)}
-                        />
+                            <ActionButton icon={icons.cards.dsoc}
+                                          iconSize="50px"
+                                          text="dSoc website"
+                                          flexDirection="column"
+                                          callback={() => props.stackContext.drawCard(2)}
+                            />
 
-                        <ActionButton icon={icons.figma_white}
-                                      iconSize="50px"
-                                      text="dSoc designs"
-                                      flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(3)}
-                        />
+                            <ActionButton icon={icons.figma_white}
+                                          iconSize="50px"
+                                          text="dSoc designs"
+                                          flexDirection="column"
+                                          callback={() => props.stackContext.drawCard(3)}
+                            />
 
 
+                        </div>
                     </div>
 
                     <div style={{
@@ -174,27 +184,22 @@ export default function AboutMe(props) {
 
                         <ActionButton icon={icons.touchpad}
                                       text="JS zoom/pan"
-                                      callback={() => props.stackContext.drawCard(4)}
+                                      href={jsZoomPanHref}
                         />
 
                         <ActionButton icon={icons.camera}
                                       text="Photography"
-                                      callback={() => props.stackContext.drawCard(4)}
-                        />
-
-                        <ActionButton icon={icons.printer}
-                                      text="3D printing"
-                                      callback={() => props.stackContext.drawCard(4)}
+                                      callback={() => props.stackContext.drawCard(5)}
                         />
 
                         <ActionButton icon={icons.link}
                                       text="Links"
-                                      callback={() => props.stackContext.drawCard(4)}
+                                      href={linksHref}
                         />
 
                         <ActionButton icon={icons.document}
                                       text="WIP"
-                                      callback={() => props.stackContext.drawCard(4)}
+                                      callback={() => null}
                         />
                     </div>
                 </div>

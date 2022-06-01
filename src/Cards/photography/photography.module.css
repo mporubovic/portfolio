@@ -1,0 +1,29 @@
+.photography {
+    display: flex;
+    background: linear-gradient(45deg, #2F2F2F, #1a1a1a);
+    min-height: 100%;
+}
+
+.sectionB {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex: 2;
+    padding: 50px 0;
+}
+
+.sectionB img {
+    object-fit: contain;
+    max-width: 45%;
+}
+
+@media screen and (max-width: 1000px) {
+    .photography {
+        flex-direction: column;
+    }
+
+    .sectionB {
+        padding: 50px 20px;
+        justify-content: center;
+    }
+}

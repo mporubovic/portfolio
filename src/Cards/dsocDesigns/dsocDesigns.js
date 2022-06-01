@@ -8,15 +8,14 @@ const images = [
     require("./ethereum.jpg")
 ]
 
-console.log(images)
 export default function dsocDesigns() {
     return (
         <div className={styles.dsocDesigns}>
             {
                 images.map((image, i) => (
                     // has to be wrapped in a div because of Safari stretching images in flex boxes
-                    <div className={styles.imageWrapper}>
-                        <img src={image} key={i} />
+                    <div key={i} className={styles.imageWrapper}>
+                        <img src={image} />
                     </div>
                 ))
             }
