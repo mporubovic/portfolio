@@ -4,6 +4,10 @@ html, * {
     font-family: Helvetica, sans-serif;
 }
 
+*::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     background-color: #2a2a2a;
 }

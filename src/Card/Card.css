@@ -7,7 +7,7 @@
     border-radius: 15px;
     /*border: 1px solid black;*/
     box-shadow: 0 0 7px 3px #00000054;
-    overflow: hidden;
+    overflow-y: scroll;
     flex-direction: column;
 }
 
@@ -23,13 +23,13 @@
 
 .body {
     transition: all 1.5s;
-    overflow: hidden;
+    overflow-y: scroll;
     height: 100%;
 }
 
 
 .label {
-    position: absolute;
+    position: sticky;
     left: 0;
     right: 0;
     bottom: 0;
@@ -49,12 +49,12 @@
 
 }
 
-.wrapper {
-    color: white;
-    /*background-color: ;*/
-    /*-webkit-text-fill-color: transparent;*/
-    /*-webkit-background-clip: content;*/
-    /*background-clip: text;*/
-    /*-webkit-background-clip: text;*/
-    /*color: transparent;*/
+.icon-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(48deg, black, rgba(0, 0, 0, 0.51));
 }

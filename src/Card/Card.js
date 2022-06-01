@@ -5,16 +5,25 @@ export default function Card(props) {
     const id = props.id
 
     const dimOpacity = 0.35
-    const [mobile, setMobile] = useState(window.innerWidth <= 500)
+    const [mobile, _setMobile] = useState(window.innerWidth <= 500)
+    const mobileRef = useRef(window.innerWidth <= 500)
+    const setMobile = (val) => {
+        _setMobile(val)
+        mobileRef.current = val
+    }
 
     const defaults = {
         stack: {
             xOffset: 210,
+            mobile_xOffset: 70,
             yOffset: 200,
+            mobile_yOffset: 70,
             spacing: 35,
             opacity: 1,
             width: "170px",
+            mobile_width: "50px",
             height: "170px",
+            mobile_height: "50px",
             rotation: "30,-6,18,45deg",
             transition: 'transform 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.5s cubic-bezier(0.74,-0.03, 0.25, 0.95)'
         },
@@ -112,7 +121,6 @@ export default function Card(props) {
 
         "stack": () => {
             if (pointer === "move" && !props.locked) {
-                console.log("AAAA")
                 setPointer("in")
                 setTransition(defaults.preview.transition)
                 setX(x - defaults.preview.distance)
@@ -123,7 +131,6 @@ export default function Card(props) {
 
             if ((pointer === "down" && !props.locked) || props.isActive) {
                 setPointer("in")
-                console.log("BBBBB")
 
                 if (!props.isActive) props.clickHandler()
                 props.lock()
@@ -138,19 +145,16 @@ export default function Card(props) {
             }
 
             if (props.stackPosition !== stackPosition && props.stackPosition > -1) {
-                console.log("CCCC")
                 setStackPosition(props.stackPosition)
-                setY(window.innerHeight - defaults.stack.yOffset - props.stackPosition*defaults.stack.spacing)
+                setY(window.innerHeight - (mobile ? defaults.stack.mobile_yOffset : defaults.stack.yOffset) - props.stackPosition*defaults.stack.spacing)
                 setZIndex(10 + props.stackPosition)
             }
 
             if (transitionEnded) {
-                console.log("DDDDD")
                 setTransitionEnded(false)
             }
 
             if (props.dim !== dim) {
-                console.log("EEEEE")
                 setDim(props.dim)
                 setOpacity(props.dim ? dimOpacity : defaults.stack.opacity)
             }
@@ -207,8 +211,8 @@ export default function Card(props) {
                 props.unlock()
 
                 setTransition(defaults.stack.transition)
-                setX(window.innerWidth - defaults.stack.xOffset)
-                setY(window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing)
+                setX(window.innerWidth - (mobile ? defaults.stack.mobile_xOffset : defaults.stack.xOffset))
+                setY(window.innerHeight - (mobile ? defaults.stack.mobile_yOffset : defaults.stack.yOffset) - stackPositionRef.current*defaults.stack.spacing)
 
                 setState("drag-to-stack")
             }
@@ -221,7 +225,7 @@ export default function Card(props) {
             if (pointer === "move") {
                 setPointer("down")
 
-                let originalY = window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing
+                let originalY = window.innerHeight - (mobile ? defaults.stack.mobile_yOffset : defaults.stack.yOffset) - stackPositionRef.current*defaults.stack.spacing
 
                 let dx = x + dragDelta.current.x - props.stackContext.x
                 let dy = y - originalY
@@ -332,15 +336,15 @@ export default function Card(props) {
 
     const resize = (to) => {
         if ((stateRef.current === "board" && to === undefined) || to === "board") {
-            setX(Math.round(window.innerWidth*(1 - (mobile ? defaults.board.mobile_width : defaults.board.width))/2))
-            setY(Math.round(window.innerHeight*(1 - (mobile ? defaults.board.mobile_height : defaults.board.height))/2))
-            setWidth( Math.round(window.innerWidth*(mobile ? defaults.board.mobile_width : defaults.board.width)) + "px")
-            setHeight(Math.round(window.innerHeight*(mobile ? defaults.board.mobile_height : defaults.board.height)) + "px")
+            setX(Math.round(window.innerWidth*(1 - (mobileRef.current ? defaults.board.mobile_width : defaults.board.width))/2))
+            setY(Math.round(window.innerHeight*(1 - (mobileRef.current ? defaults.board.mobile_height : defaults.board.height))/2))
+            setWidth( Math.round(window.innerWidth*(mobileRef.current ? defaults.board.mobile_width : defaults.board.width)) + "px")
+            setHeight(Math.round(window.innerHeight*(mobileRef.current ? defaults.board.mobile_height : defaults.board.height)) + "px")
         } else {
-            setX(window.innerWidth - defaults.stack.xOffset)
-            setY(window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing)
-            setWidth(defaults.stack.width)
-            setHeight(defaults.stack.height)
+            setX(window.innerWidth - (mobileRef.current ? defaults.stack.mobile_xOffset : defaults.stack.xOffset))
+            setY(window.innerHeight - (mobileRef.current ? defaults.stack.mobile_yOffset : defaults.stack.yOffset) - stackPositionRef.current*defaults.stack.spacing)
+            setWidth(mobileRef.current ? defaults.stack.mobile_width : defaults.stack.width)
+            setHeight(mobileRef.current ? defaults.stack.mobile_height : defaults.stack.height)
         }
     }
 
@@ -422,17 +426,9 @@ export default function Card(props) {
                      (state === "board" && props.content.component)
                          ? (<CardContent stackContext={props.stackContext} />)
                          : (
-                            <div style={{
-                                height: "100%",
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                background: "linear-gradient(48deg, black, #00000054)"
-                            }}>
+                            <div className="icon-wrapper">
                                 <img src={props.content.icon} style={{
-                                    height: "70px"
+                                    height: mobile ? "30px" : "70px"
                                 }} />
 
                             </div>
@@ -441,12 +437,14 @@ export default function Card(props) {
             </div>
 
 
-            <div className="label" style={{
-                backgroundColor: id === 0 ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.3)",
-                color: id === 0 ? "black" : "white"
-            }}>
-                [{id}] {props.content.text}
-            </div>
+            {
+                (!mobile || state === "board") && (<div className="label" style={{
+                    backgroundColor: id === 0 ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.3)",
+                    color: id === 0 ? "black" : "white"
+                }}>
+                    [{id}] {props.content.text}
+                </div>)
+            }
         </div>
     )
 }
