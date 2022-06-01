@@ -8,17 +8,26 @@ body {
     background-color: #2a2a2a;
 }
 
-.content-card {
+.content-card, .text-card {
+    display: flex;
     background: linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
     padding: 20px 30px;
-    display: flex;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 18px 0 #1616168f;
+}
+
+.content-card {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    color: white;
-    border-radius: 10px;
-    /*border: 1px solid #777777;*/
-    box-shadow: 0 0 18px 0 #1616168f;
+}
+
+.text-card {
+    flex-direction: column;
+    gap: 20px;
+    text-align: justify;
+    align-items: flex-start;
 }
 
 .card-sectionA {
@@ -40,6 +49,11 @@ body {
 .image-card img {
     max-width: 100%;
     /*border-radius: 10px;*/
+}
+
+a {
+    text-decoration: underline;
+    color: white;
 }
 
 @media screen and (max-width: 1000px) {
