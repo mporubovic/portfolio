@@ -24,7 +24,7 @@ const text = [
     "I really enjoy web programming, currently perfecting my React skills and learning TypeScript, passion for UI/UX, use Figma a lot.",
     "In my spare time, if I’m not programming or designing, I learn Chinese (普通话) and read books; my favourites are Sapiens and I, Robot.",
     "My programming knowledge is listed below and have a look at some of my projects.",
-    "Pro tip: Command/Ctrl + drag to rearrange cards in the stack"
+    "Pro tip: Command/Ctrl + drag to re-arrange cards in the stack"
 ]
 
 export default function AboutMe(props) {
@@ -67,7 +67,8 @@ export default function AboutMe(props) {
                             icons.web.js,
                             icons.web.react,
                             icons.web.vue,
-                            icons.web.three
+                            icons.web.three,
+                            icons.web.node
                         ]} height="30px" />
 
                         <Icons icons={[
@@ -76,15 +77,15 @@ export default function AboutMe(props) {
                             icons.programming.laravel,
                             icons.programming.java,
                             icons.programming.python
-                        ]} height="20px" />
+                        ]} height="25px" />
 
                         <Icons icons={[
-                            icons.tools.figma,
+                            icons.figma,
                             icons.tools.photoshop,
                             icons.tools.fusion360,
                             icons.tools.facebookads,
                             icons.tools.googleanalytics,
-                        ]} height="20px" />
+                        ]} height="25px" />
                     </div>
 
                 </div>
@@ -138,7 +139,7 @@ export default function AboutMe(props) {
                                       iconSize="50px"
                                       text="Cube"
                                       flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(2)}
+                                      callback={() => props.stackContext.drawCard(1)}
                         />
 
                         <ActionButton icon={icons.cards.mylayr}
@@ -152,14 +153,14 @@ export default function AboutMe(props) {
                                       iconSize="50px"
                                       text="dSoc website"
                                       flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(3)}
+                                      callback={() => props.stackContext.drawCard(2)}
                         />
 
-                        <ActionButton icon={icons.figma}
+                        <ActionButton icon={icons.figma_white}
                                       iconSize="50px"
                                       text="dSoc designs"
                                       flexDirection="column"
-                                      callback={() => props.stackContext.drawCard(1)}
+                                      callback={() => props.stackContext.drawCard(3)}
                         />
 
 

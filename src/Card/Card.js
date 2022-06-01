@@ -7,7 +7,7 @@ export default function Card(props) {
     const dimOpacity = 0.35
     const [mobile, setMobile] = useState(window.innerWidth <= 500)
 
-    const constants = {
+    const defaults = {
         stack: {
             xOffset: 250,
             yOffset: 200,
@@ -85,9 +85,9 @@ export default function Card(props) {
             setOpacity(1)
             setZIndex(10 + props.stackPosition)
 
-            setRotation(constants.stack.rotation)
+            setRotation(defaults.stack.rotation)
             setStackPosition(props.stackPosition)
-            setTransition(constants.stack.transition)
+            setTransition(defaults.stack.transition)
 
             resize("stack")
             setState("initial-to-stack")
@@ -98,7 +98,7 @@ export default function Card(props) {
                 setTransitionEnded(false)
 
                 if (props.isActive) {
-                    setTransition(constants.board.transition)
+                    setTransition(defaults.board.transition)
                     setZIndex(1000)
                     setZ(-1000)
                     setRotation(null)
@@ -113,9 +113,9 @@ export default function Card(props) {
         "stack": () => {
             if (pointer === "move" && !props.locked) {
                 setPointer("in")
-                setTransition(constants.preview.transition)
-                setX(x - constants.preview.distance)
-                setY(y + constants.preview.distance)
+                setTransition(defaults.preview.transition)
+                setX(x - defaults.preview.distance)
+                setY(y + defaults.preview.distance)
                 // props.preview()
                 setState("stack-to-preview")
             }
@@ -126,7 +126,7 @@ export default function Card(props) {
                 if (!props.isActive) props.clickHandler()
                 props.lock()
 
-                setTransition(constants.board.transition)
+                setTransition(defaults.board.transition)
                 setZIndex(1000)
                 setZ(-1000)
                 setRotation(null)
@@ -137,7 +137,7 @@ export default function Card(props) {
 
             if (props.stackPosition !== stackPosition && props.stackPosition > -1) {
                 setStackPosition(props.stackPosition)
-                setY(window.innerHeight - constants.stack.yOffset - props.stackPosition*constants.stack.spacing)
+                setY(window.innerHeight - defaults.stack.yOffset - props.stackPosition*defaults.stack.spacing)
                 setZIndex(10 + props.stackPosition)
             }
 
@@ -147,7 +147,7 @@ export default function Card(props) {
 
             if (props.dim !== dim) {
                 setDim(props.dim)
-                setOpacity(props.dim ? dimOpacity : constants.stack.opacity)
+                setOpacity(props.dim ? dimOpacity : defaults.stack.opacity)
             }
 
         },
@@ -161,8 +161,8 @@ export default function Card(props) {
 
         "preview": () => {
             if (pointer === "out") {
-                setX(x + constants.preview.distance)
-                setY(y - constants.preview.distance)
+                setX(x + defaults.preview.distance)
+                setY(y - defaults.preview.distance)
                 // props.unpreview()
                 setState("preview-to-stack")
 
@@ -180,7 +180,7 @@ export default function Card(props) {
                 props.clickHandler()
                 props.lock()
 
-                setTransition(constants.board.transition)
+                setTransition(defaults.board.transition)
                 setZIndex(1000)
                 setZ(-1000)
                 setRotation(null)
@@ -201,9 +201,9 @@ export default function Card(props) {
 
                 props.unlock()
 
-                setTransition(constants.stack.transition)
-                setX(window.innerWidth - constants.stack.xOffset)
-                setY(window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing)
+                setTransition(defaults.stack.transition)
+                setX(window.innerWidth - defaults.stack.xOffset)
+                setY(window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing)
 
                 setState("drag-to-stack")
             }
@@ -216,7 +216,7 @@ export default function Card(props) {
             if (pointer === "move") {
                 setPointer("down")
 
-                let originalY = window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing
+                let originalY = window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing
 
                 let dx = x + dragDelta.current.x - props.stackContext.x
                 let dy = y - originalY
@@ -226,7 +226,7 @@ export default function Card(props) {
 
                 dragDelta.current = {x:0, y:0}
 
-                if (Math.abs(dy) > constants.stack.spacing) {
+                if (Math.abs(dy) > defaults.stack.spacing) {
                     props.shift(dy > 1 ? -1 : 1)
                 }
 
@@ -249,7 +249,7 @@ export default function Card(props) {
         "preview-to-stack": () => {
             if (transitionEnded) {
                 setTransitionEnded(false)
-                setTransition(constants.stack.transition)
+                setTransition(defaults.stack.transition)
                 setState("stack")
             }
         },
@@ -262,6 +262,7 @@ export default function Card(props) {
                 // setZIndex(100)
                 setBackgroundBlur("10px")
                 setZIndex(1)
+                setCursor("default")
                 setState("board")
             }
         },
@@ -272,11 +273,11 @@ export default function Card(props) {
             }
 
             if (!props.isActive) {
-                setTransition(constants.board.transition)
+                setTransition(defaults.board.transition)
                 setZIndex(10 + props.stackPosition)
                 setZ(0)
 
-                setRotation(constants.stack.rotation)
+                setRotation(defaults.stack.rotation)
 
                 if (props.stackPosition !== stackPosition) {
                     setStackPosition(props.stackPosition)
@@ -292,7 +293,7 @@ export default function Card(props) {
         "board-to-stack": () => {
             if (transitionEnded) {
                 setTransitionEnded(false)
-                setTransition(constants.stack.transition)
+                setTransition(defaults.stack.transition)
                 setBackgroundBlur("")
                 setState("stack")
             }
@@ -322,18 +323,15 @@ export default function Card(props) {
 
     const resize = (to) => {
         if ((stateRef.current === "board" && to === undefined) || to === "board") {
-            setX(Math.round(window.innerWidth*(1 - (mobile ? constants.board.mobile_width : constants.board.width))/2))
-            setY(Math.round(window.innerHeight*(1 - (mobile ? constants.board.mobile_height : constants.board.height))/2))
-
-            console.log(Math.round(window.innerWidth*(1 - (mobile ? constants.board.mobile_width : constants.board.width))/2),Math.round(window.innerHeight*(1 - (mobile ? constants.board.mobile_height : constants.board.height))/2))
-
-            setWidth( Math.round(window.innerWidth*(mobile ? constants.board.mobile_width : constants.board.width)) + "px")
-            setHeight(Math.round(window.innerHeight*(mobile ? constants.board.mobile_height : constants.board.height)) + "px")
+            setX(Math.round(window.innerWidth*(1 - (mobile ? defaults.board.mobile_width : defaults.board.width))/2))
+            setY(Math.round(window.innerHeight*(1 - (mobile ? defaults.board.mobile_height : defaults.board.height))/2))
+            setWidth( Math.round(window.innerWidth*(mobile ? defaults.board.mobile_width : defaults.board.width)) + "px")
+            setHeight(Math.round(window.innerHeight*(mobile ? defaults.board.mobile_height : defaults.board.height)) + "px")
         } else {
-            setX(window.innerWidth - constants.stack.xOffset)
-            setY(window.innerHeight - constants.stack.yOffset - stackPositionRef.current*constants.stack.spacing)
-            setWidth(constants.stack.width)
-            setHeight(constants.stack.height)
+            setX(window.innerWidth - defaults.stack.xOffset)
+            setY(window.innerHeight - defaults.stack.yOffset - stackPositionRef.current*defaults.stack.spacing)
+            setWidth(defaults.stack.width)
+            setHeight(defaults.stack.height)
         }
     }
 
@@ -413,10 +411,11 @@ export default function Card(props) {
             </div>
 
 
-            <div className="label">
-                <div className="wrapper">
-                    {id} {props.content.text}
-                </div>
+            <div className="label" style={{
+                backgroundColor: id === 0 ? "white" : "rgba(0,0,0,0.3)",
+                color: id === 0 ? "black" : "white"
+            }}>
+                {id} {props.content.text}
             </div>
         </div>
     )

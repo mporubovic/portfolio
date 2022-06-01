@@ -6,6 +6,7 @@ import ActionButton from "../common/ActionButton/ActionButton";
 import canvas from './canvas.png'
 import controls from './controls.png'
 import {useEffect, useRef} from "react";
+import ProjectHeader from "../common/ProjectHeader/ProjectHeader";
 
 const githubLink = "https://github.com/mporubovic/cube"
 const demoLink = "http://cube.porubovic.sk/"
@@ -15,42 +16,16 @@ export default function Cube() {
     return (
         <div className={styles.Cube}>
             <div className={styles.sectionA}>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px"
-                }}>
-                    <div className="content-card">
-                        <h2>Cube</h2>
-                    </div>
 
-                    <div className={styles.projectInfo}>
-
-                        <Icons icons={[
-                            icons.web.js,
-                            icons.web.node,
-                            icons.digitalocean
-                        ]}  height="20px" style={{
-                            gridArea: "1 / 1 / 2 / 3",
-                            paddingTop: "15px",
-                            paddingBottom: "15px",
-                            flex: 3,
-                        }}
-
-
-                        />
-
-                        <div style={{
-                            display: "flex",
-                            gap: "10px"
-                        }}>
-                            <ActionButton text="Source" icon={icons.github} href={githubLink} style={{flex: 1}} />
-
-                            <ActionButton text="cube.porubovic.sk" href={demoLink} style={{flex: 1}} />
-                        </div>
-
-                    </div>
-                </div>
+                <ProjectHeader title="Cube"
+                    siteTitle={"cube.porubovic.sk"} siteHref={demoLink}
+                    sourceLink={githubLink}
+                    icons={[
+                        icons.web.js,
+                        icons.web.node,
+                        icons.digitalocean
+                    ]}
+                />
 
                 <div className="content-card" style={{
                     flexDirection: "column",
@@ -70,11 +45,11 @@ export default function Cube() {
                 </div>
 
                 <div className={styles.showcase}>
-                    <div className="content-card" style={{flex: 1}}>
+                    <div className="image-card" style={{flex: 1}}>
                         <img src={canvas} />
                     </div>
 
-                    <div className="content-card" style={{flex: 1}}>
+                    <div className="image-card" style={{flex: 1}}>
                         <img src={controls} />
                     </div>
                 </div>

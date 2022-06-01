@@ -44,14 +44,14 @@
     text-transform: uppercase;
     /*background-color: white;*/
     font-size: 13px;
-    background-color: rgba(0,0,0,0.3);
     flex-basis: 30px;
+    /*padding: 5px 15px;*/
+
 }
 
 .wrapper {
     color: white;
     /*background-color: ;*/
-    padding: 5px 15px;
     /*-webkit-text-fill-color: transparent;*/
     /*-webkit-background-clip: content;*/
     /*background-clip: text;*/

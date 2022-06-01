@@ -12,6 +12,7 @@
     transition: background 0.5s;
     text-decoration: none;
     gap: 15px;
+    cursor: pointer;
 }
 
 .ActionButton:hover {

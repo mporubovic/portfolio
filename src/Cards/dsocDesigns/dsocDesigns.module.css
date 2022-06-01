@@ -1,0 +1,40 @@
+.dsocDesigns {
+    height: 100%;
+    background: linear-gradient(125deg, #202020 0%, #303030 40%, #232323 calc(40% + 1px), #2d2d2d 60%, #3a3a3a calc(60% + 1px), #242424 72%, #303030 calc(72% + 1px), #1a1a1a 100%);
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 0 50px;
+    overflow-y: scroll;
+}
+
+@media screen and (max-width: 1000px) {
+    .dsocDesigns {
+        flex-direction: column;
+        padding: 20px;
+        min-height: 100%;
+        height: unset;
+    }
+
+    .imageWrapper img {
+        width: 95%;
+        height: initial;
+    }
+
+    .imageWrapper {
+    }
+}
+
+.imageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+
+}
+
+.imageWrapper img {
+    box-shadow: 0 0 10px 3px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+    max-height: 100%;
+}
