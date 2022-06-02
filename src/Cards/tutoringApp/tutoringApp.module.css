@@ -3,7 +3,6 @@
     background-image: linear-gradient(rgba(31, 31, 31, 0.7) .1em, transparent .1em), linear-gradient(90deg, rgba(28, 28, 28, 0.7) .1em, transparent .1em);
     background-size: 3em 3em;
     min-height: 100%;
-
 }
 
 @media screen and (max-width: 1000px) {

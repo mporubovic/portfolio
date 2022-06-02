@@ -1,7 +1,6 @@
 .Cube {
     display: flex;
     background: conic-gradient(from 30deg, rgb(53 53 53) 0%, rgb(15 15 15) 33.3%, rgb(38 38 38) 33.4%, rgb(28 28 28) 66.6%, rgb(54 54 54) 66.7%, rgb(33 33 33) 100%, rgb(0 0 0) 100%);
-    /*padding: 10px 0;*/
 }
 
 .sectionA, .sectionB {
@@ -52,8 +51,6 @@
 }
 
 .projectInfo {
-    /*display: grid;*/
-    /*grid-template-columns: repeat(4, 1fr);*/
     display: flex;
     gap: 10px;
 }

@@ -1,11 +1,8 @@
 import styles from './Cube.module.css'
-import Icons from "../common/Icons/Icons";
 import icons from "../common/Icons/iconAssets";
-import ActionButton from "../common/ActionButton/ActionButton";
 
 import canvas from './canvas.png'
 import controls from './controls.png'
-import {useEffect, useRef} from "react";
 import ProjectHeader from "../common/ProjectHeader/ProjectHeader";
 
 const githubLink = "https://github.com/mporubovic/cube"
@@ -55,7 +52,6 @@ export default function Cube() {
                 <div className="content-card" style={{flexDirection: "column", flex: 1}}>
                     <h2>Live demo</h2>
                     <br />
-                    {/*<span>span</span>*/}
                     <iframe src={demoLink} />
                 </div>
 

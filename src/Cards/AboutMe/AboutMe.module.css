@@ -1,6 +1,5 @@
 .AboutMe {
     display: flex;
-    /*height: 100%;*/
     flex-direction: row;
     justify-content: center;
     border-radius: 15px;
@@ -11,12 +10,10 @@
     background: linear-gradient(113.43deg, #212121 0%, #111111 97.72%);
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.46);
     z-index: 2;
-    /*max-width: 500px;*/
 }
 
 .sectionBBackground {
     background: linear-gradient(113.43deg, #2F2F2F 0%, #101010 97.72%);
-    /*max-width: 500px;*/
 }
 
 .sectionABackground, .sectionBBackground {
@@ -25,31 +22,23 @@
 }
 
 .sectionA {
-
     max-width: 600px;
-
 }
 
 .sectionA, .sectionB {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
 }
 
 
 @media screen and (min-width: 1001px) {
     .sectionABackground {
         flex: 6;
-        /*border-radius: 0 15px 15px 0;*/
-        /*justify-content: right;*/
     }
 
     .sectionBBackground {
         flex: 4;
-        /*margin-left: -20px;*/
-        /*margin-right: -20px;*/
-        /*justify-content: left;*/
     }
 
     .sectionABackground, .sectionBBackground {
@@ -71,7 +60,6 @@
 
     .sectionABackground {
         padding: 50px 20px;
-        /*border-radius: 0 0 15px 15px;*/
     }
 
     .sectionBBackground {

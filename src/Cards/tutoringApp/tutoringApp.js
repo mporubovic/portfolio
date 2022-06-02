@@ -5,7 +5,6 @@ import styles from './tutoringApp.module.css'
 import homepage from './homepage.png'
 import board from './board.png'
 import boards from './boards.png'
-import cards from './cards.png'
 import drawing from './drawing.png'
 
 const title = "Tutoring app"

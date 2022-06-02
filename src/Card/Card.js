@@ -45,7 +45,7 @@ export default function Card(props) {
 
     const [opacity, setOpacity] = useState(0)
     const [zIndex, setZIndex] = useState(0)
-    // const [transform, setTransform] = useState("")
+
     const [transition, setTransition] = useState("")
     const [width, setWidth] = useState("")
     const [height, setHeight] = useState("")
@@ -61,7 +61,6 @@ export default function Card(props) {
         stackPositionRef.current = val
         _setStackPosition(val)
     }
-    // const [prevStackPosition, setPrevStackPosition] = useState(0)
     const [dim, setDim] = useState(false)
 
     const dragDelta = useRef({x: 0, y: 0})
@@ -85,7 +84,6 @@ export default function Card(props) {
     }
     const lastPointer = useRef("")
 
-    const [backgroundBlur, setBackgroundBlur] = useState("")
     const [cursor, setCursor] = useState("pointer")
     const ctrlKeyDown = useRef(false)
 
@@ -270,7 +268,6 @@ export default function Card(props) {
                 setTransitionEnded(false)
                 props.unlock()
                 // setZIndex(100)
-                setBackgroundBlur("10px")
                 setZIndex(1)
                 setCursor("default")
                 resize("board")
@@ -305,7 +302,6 @@ export default function Card(props) {
             if (transitionEnded) {
                 setTransitionEnded(false)
                 setTransition(defaults.stack.transition)
-                setBackgroundBlur("")
                 resize("stack")
                 setPointer("out")
                 setState("stack")
@@ -388,10 +384,8 @@ export default function Card(props) {
     return (
         <div className="Card"
              style={{
-                 // ...props.content.background,
                  transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""} ${z ? `translateZ(${z}px)` : ""}`,
                  // TODO: implement scaling instead of width/height for more efficient rendering
-                 // transform: `translate(${x}px, ${y}px) ${rotation ? `rotate3d(${rotation})` : ""}`,
                  width: width,
                  height: height,
                  opacity: opacity,
@@ -417,11 +411,7 @@ export default function Card(props) {
              }}
         >
 
-            <div className="body" style={{
-                // backdropFilter: `blur(${backgroundBlur})`
-            }}>
-                {/*{ state === "board" && props.content.component && (<CardContent stackContext={props.stackContext} />)}*/}
-
+            <div className="body">
                 {
                      (state === "board" && props.content.component)
                          ? (<CardContent stackContext={props.stackContext} />)
@@ -432,7 +422,7 @@ export default function Card(props) {
                                 }} />
 
                             </div>
-                         )
+                            )
                 }
             </div>
 
