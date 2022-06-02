@@ -6,7 +6,7 @@ import controls from './controls.png'
 import ProjectHeader from "../common/ProjectHeader/ProjectHeader";
 
 const githubLink = "https://github.com/mporubovic/cube"
-const demoLink = "http://cube.porubovic.sk/"
+const demoLink = "https://cube.porubovic.sk/"
 
 
 export default function Cube() {
