@@ -1,13 +1,13 @@
-.dsocWebsite {
+.tutoringApp {
     display: flex;
-    background: linear-gradient(180deg, #2a2a2a 0%, #1E0031 100%), linear-gradient(121.28deg, #000000 0%, #000000 38.54%), linear-gradient(180deg, #535353 0%, #000000 100%), linear-gradient(294.84deg, #303030 0%, #2f2f2f 100%), linear-gradient(121.28deg, #191919 0%, #171717 100%), radial-gradient(50% 72.12% at 50% 50%, #383838 0%, #252525 100%);
-    background-blend-mode: color-dodge, screen, overlay, exclusion, difference, normal;
+    background-image: linear-gradient(rgba(31, 31, 31, 0.7) .1em, transparent .1em), linear-gradient(90deg, rgba(28, 28, 28, 0.7) .1em, transparent .1em);
+    background-size: 3em 3em;
     min-height: 100%;
 
 }
 
 @media screen and (max-width: 1000px) {
-    .dsocWebsite {
+    .tutoringApp {
         flex-direction: column;
     }
 }

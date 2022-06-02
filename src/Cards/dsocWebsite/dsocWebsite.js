@@ -30,15 +30,9 @@ export default function dsocWebsite() {
                 />
 
                 <div className="text-card">
-
-                    <span>Came up with the design, integrated everyone's opinions</span>
-                    <span>Design process can be seen at //Figma</span>
-                    <span>
-                        As the web officer of the Decentralised Society, I listened to and incorporated various design ideas, capturing them on Figma to create a fresh, responsive design using React. Members use it to register for events.
-                    </span>
-
-                    <span>Backend in strapi</span>
-                    <span>Also used a UI framework [name]</span>
+                    <span>As the web officer of the Decentralised Society, I came up with the design for the society website and incorporated other people's ideas in Figma.</span>
+                    <span>I used React to create this fresh, responsive design, along with <a href="https://mantine.dev" target="_blank">Mantine UI</a> for event sign-up forms.</span>
+                    <span>The backend uses <a href="https://strapi.io" target="_blank">Strapi.io</a> to handle event registrations and static content editing.</span>
                 </div>
 
                 <div className="image-card">

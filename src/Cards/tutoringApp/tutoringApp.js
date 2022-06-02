@@ -19,7 +19,7 @@ export default function tutoringApp() {
 
 
     return (
-        <div className={styles.dsocWebsite}>
+        <div className={styles.tutoringApp}>
             <div className="card-sectionA">
                 <ProjectHeader
                     title={title}
@@ -33,10 +33,11 @@ export default function tutoringApp() {
                     ]}
                 />
 
-                <div className="content-card" style={{flexDirection: "column"}}>
+                <div className="text-card">
 
-                    <span>I created a single-page online tutoring app for my tutor to help her organise teaching materials and easily share them with her students, saving her 1 hour each day.</span>
-                    <span>I used Vue.js for the front-end, with dynamic components and CSS grids, consuming a REST API written in Laravel, using a MySQL database with polymorphic relations and a Lumen webscraping microservice.</span>
+                    <span>I created a single-page online tutoring app for my tutor to help her organise teaching materials like PDFs, images, YouTube videos, drawings and links.</span>
+                    <span>The front-end was built using Vue.js, with dynamic components and CSS grids, integration with TinyMCE editor and fabric.js drawing library.</span>
+                    <span>I used Laravel for the backend to create REST API endpoints, storing data in a MySQL database. I also used Lumen for a webscraping micro-service.</span>
                 </div>
 
                 <div className="image-card">
@@ -56,10 +57,6 @@ export default function tutoringApp() {
                 <div className="image-card">
                     <img src={drawing} />
                 </div>
-
-                {/*<div className="image-card">*/}
-                {/*    <img src={cards} style={{maxHeight: "50%"}} />*/}
-                {/*</div>*/}
             </div>
         </div>
     )

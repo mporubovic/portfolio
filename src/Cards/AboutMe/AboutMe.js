@@ -22,12 +22,11 @@ const linksHref= "http://links.porubovic.sk/"
 const cv = "https://google.com"
 
 const text = [
-    "Welcome to my portfolio! Click on any project below/on the right to learn more.",
-    "I’ve done 2 years of Engineering and a year of Computer Science",
-    "I really enjoy web programming, currently perfecting my React skills and learning TypeScript, passion for UI/UX, use Figma a lot.",
+    "Welcome to my portfolio! Click on any project to learn more.",
+    "I’ve done 2 years of Engineering and a year of Computer Science, learning the basics of algorithms, data management and OOP. My programming knowledge is listed below.",
+    "I really enjoy web development, currently improving my React skills and learning TypeScript. I also design UIs, and I use Figma daily.",
     "In my spare time, if I’m not programming or designing, I learn Chinese (普通话) and read books; my favourites are Sapiens and I, Robot.",
-    "My programming knowledge is listed below and have a look at some of my projects.",
-    "Pro tip: Command/Ctrl + drag to re-arrange cards in the stack"
+    "Pro tip: Command/Ctrl + drag to re-arrange cards in the stack."
 ]
 
 export default function AboutMe(props) {
