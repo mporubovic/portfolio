@@ -19,5 +19,8 @@
     background: linear-gradient(152.97deg, rgba(0, 117, 255, 0.2) 0%, rgba(0, 102, 255, 0.465) 100%);
 }
 
-.ActionButton img {
+@media screen and (max-width: 1000px) {
+    .ActionButton {
+        padding: 15px !important;
+    }
 }

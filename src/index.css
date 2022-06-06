@@ -65,4 +65,8 @@ a {
     .card-sectionA, .card-sectionB {
         padding: 50px 20px;
     }
+
+    .content-card, .text-card {
+        padding: 15px 20px !important;
+    }
 }
