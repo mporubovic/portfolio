@@ -417,7 +417,7 @@ export default function Card(props) {
                          ? (<CardContent stackContext={props.stackContext} />)
                          : (
                             <div className="icon-wrapper">
-                                <img src={props.content.icon} style={{
+                                <img src={props.content.icon} draggable="false" style={{
                                     height: mobile ? "30px" : "70px"
                                 }} />
 

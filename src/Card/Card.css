@@ -46,4 +46,5 @@
     align-items: center;
     justify-content: center;
     background: linear-gradient(48deg, black, rgba(0, 0, 0, 0.51));
+    user-select: none;
 }
