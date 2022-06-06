@@ -65,7 +65,7 @@ export default function Card(props) {
 
     const dragDelta = useRef({x: 0, y: 0})
 
-    const [state, _setState] = useState("initial")
+    const [state, _setState] = useState(null)
     const stateRef = useRef(state)
     const setState = (val) => {
         props.stateChange(stateRef.current, val)
@@ -365,6 +365,8 @@ export default function Card(props) {
         window.addEventListener("keydown", keyDownHandler)
         window.addEventListener("keyup", keyUpHandler)
 
+        setTimeout(() => setState("initial"), 0)
+
         return () => {
             window.removeEventListener("pointermove", pointerMoveHandler)
             window.removeEventListener("pointerup", pointerUpHandler)
@@ -375,8 +377,10 @@ export default function Card(props) {
     }, [])
 
     useEffect(() => {
-        console.log(`Card ${id} re-rendered to state: ${state}`)
-        states[state]()
+        if (state) {
+            console.log(`Card ${id} re-rendered to state: ${state}`)
+            states[state]()
+        }
     })
 
     const CardContent = props.content.component
