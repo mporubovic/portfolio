@@ -19,7 +19,7 @@ const discord = "https://discord.com/users/213766571942871041"
 const jsZoomPanHref = "https://github.com/mporubovic/zoomable.js"
 const linksHref= "http://links.porubovic.sk/"
 
-const cv = "https://google.com"
+const cv = "/MatejPorubovic.pdf"
 
 const text = [
     "Welcome to my portfolio! Click on any project to learn more.",
