@@ -2,7 +2,6 @@
     position: fixed;
     left: 0;
     top: 0;
-    user-select: none;
     border-radius: 15px;
     box-shadow: 0 0 7px 3px #00000054;
     overflow-y: scroll;
