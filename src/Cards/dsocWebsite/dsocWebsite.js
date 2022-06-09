@@ -9,8 +9,8 @@ import singleEvent from './single-event.png'
 const title = "dSoc Website"
 
 const githubLink = "https://github.com/soton-dsoc/website"
-const demoLink = "https://soton-dsoc.org/"
-const demoTitle = "soton-dsoc.org"
+const demoLink = "https://dsoc.porubovic.sk/"
+const demoTitle = "dsoc.porubovic.sk"
 
 
 export default function dsocWebsite() {
