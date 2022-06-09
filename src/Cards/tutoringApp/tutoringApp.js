@@ -10,7 +10,7 @@ import drawing from './drawing.png'
 const title = "Tutoring app"
 
 const githubLink = "https://github.com/mporubovic/layr-fe"
-const demoLink = "http://mylayr.porubovic.sk"
+const demoLink = "https://mylayr.porubovic.sk"
 const demoTitle = "mylayr.porubovic.sk"
 
 
