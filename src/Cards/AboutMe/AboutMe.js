@@ -17,7 +17,7 @@ const github = "https://github.com/mporubovic"
 const discord = "https://discord.com/users/213766571942871041"
 
 const jsZoomPanHref = "https://github.com/mporubovic/zoomable.js"
-const linksHref= "http://links.porubovic.sk/"
+const linksHref= "https://links.porubovic.sk/"
 
 const cv = "/cv.pdf"
 
