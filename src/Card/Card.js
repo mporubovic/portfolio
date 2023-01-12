@@ -422,7 +422,8 @@ export default function Card(props) {
                          : (
                             <div className="icon-wrapper">
                                 <img src={props.content.icon} draggable="false" style={{
-                                    height: mobile ? "30px" : "70px"
+                                    height: mobile ? "30px" : "70px",
+                                    maxWidth: mobile ? "30px" : null
                                 }} />
 
                             </div>
