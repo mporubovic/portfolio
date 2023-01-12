@@ -38,7 +38,7 @@ export default function Card(props) {
             mobile_width: 0.95,
             height: 0.95,
             mobile_height: 0.95,
-            transition: 'width 1.5s, height 1.5s, transform 1.5s',
+            transition: `width ${mobile ? '1.0' : '1.5'}s, height ${mobile ? '1.0' : '1.5'}s, transform ${mobile ? '1.0' : '1.5'}s`,
         }
 
     }
