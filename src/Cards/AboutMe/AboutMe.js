@@ -1,5 +1,5 @@
 import styles from './AboutMe.module.css'
-import pfp from './pfp.png'
+import pfp from './pfp.jpeg'
 import ActionButton from "../common/ActionButton/ActionButton";
 import Icons from "../common/Icons/Icons";
 import icons from "../common/Icons/iconAssets";
@@ -38,7 +38,8 @@ export default function AboutMe(props) {
                 <div className={styles.sectionA}>
                     <div className="content-card">
                         <img src={pfp} style={{
-                            height: "60px"
+                            height: "80px",
+                            borderRadius: "999px"
                         }} />
                         <h1 style={{
                             marginLeft: "20px"
