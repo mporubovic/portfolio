@@ -367,6 +367,11 @@ export default function Card(props) {
 
         setTimeout(() => setState("initial"), 0)
 
+        // Handle rare bug where the initial animation doesn't trigger (stuck in initial-to-stack)
+        setTimeout(() => {
+            if (stateRef.current === "initial-to-stack") setState("initial")
+        }, 750)
+
         return () => {
             window.removeEventListener("pointermove", pointerMoveHandler)
             window.removeEventListener("pointerup", pointerUpHandler)
