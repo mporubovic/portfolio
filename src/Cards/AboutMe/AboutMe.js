@@ -153,21 +153,21 @@ export default function AboutMe(props) {
                             />
 
                             <ActionButton icon={icons.touchpad}
-                                          iconSize="50px"
+                                          iconSize="40px"
                                           text="Canvas app"
                                           flexDirection="column"
                                           href={canvasAppHref}
                             />
 
-                            <ActionButton icon={icons.cards.mylayr}
-                                          iconSize="50px"
-                                          text="Tutoring App"
+                            <ActionButton icon={icons.camera}
+                                          iconSize="40px"
+                                          text="Photography"
                                           flexDirection="column"
-                                          callback={() => props.stackContext.drawCard(4)}
+                                          callback={() => props.stackContext.drawCard(5)}
                             />
 
                             <ActionButton icon={icons.figma_white}
-                                          iconSize="50px"
+                                          iconSize="40px"
                                           text="dSoc designs"
                                           flexDirection="column"
                                           callback={() => props.stackContext.drawCard(3)}
@@ -185,9 +185,9 @@ export default function AboutMe(props) {
                                       callback={() => props.stackContext.drawCard(2)}
                         />
 
-                        <ActionButton icon={icons.camera}
-                                      text="Photography"
-                                      callback={() => props.stackContext.drawCard(5)}
+                        <ActionButton icon={icons.cards.mylayr}
+                                      text="Tutoring app"
+                                      callback={() => props.stackContext.drawCard(4)}
                         />
 
                         <ActionButton icon={icons.link}
