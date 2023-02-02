@@ -51,7 +51,7 @@ export default function Stack() {
 
     const [previewCard, setPreviewCard] = useState(-1)
 
-    const [boardCard, _setBoardCard] = useState(-1)
+    const [boardCard, _setBoardCard] = useState(defaultCard)
     const boardCardRef = useRef(boardCard)
     const setBoardCard = (val) => {
         _setBoardCard(val)
@@ -124,7 +124,7 @@ export default function Stack() {
     }
 
     function stateChange(id, previous, current) {
-        if (id === defaultCard && previous === "initial" && current === "initial-to-stack") drawCard(defaultCard)
+        //
     }
 
     useEffect(() => {

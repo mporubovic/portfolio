@@ -65,7 +65,7 @@ export default function Card(props) {
 
     const dragDelta = useRef({x: 0, y: 0})
 
-    const [state, _setState] = useState(null)
+    const [state, _setState] = useState("initial")
     const stateRef = useRef(state)
     const setState = (val) => {
         props.stateChange(stateRef.current, val)
@@ -93,27 +93,30 @@ export default function Card(props) {
             setZIndex(10 + props.stackPosition)
 
             setRotation(defaults.stack.rotation)
-            setStackPosition(props.stackPosition)
-            setTransition(defaults.stack.transition)
+            setStackPosition(0)
 
             resize("stack")
-            setState("initial-to-stack")
+
+            setTimeout(() => {
+                setTransition(defaults.stack.transition)
+                if (props.stackPosition !== 0) {
+                    setStackPosition(props.stackPosition)
+                    setY(window.innerHeight - (mobile ? defaults.stack.mobile_yOffset : defaults.stack.yOffset) - props.stackPosition*defaults.stack.spacing)
+                    setState("initial-to-stack")
+                }
+                else setState("stack")
+            }, 300)
         },
 
         "initial-to-stack": () => {
             if (transitionEnded) {
                 setTransitionEnded(false)
 
-                if (props.isActive) {
-                    setTransition(defaults.board.transition)
-                    setZIndex(1000)
-                    setZ(-1000)
-                    setRotation(null)
-
-                    resize("board")
-                    setState("preview-to-board")
+                if (props.isActive) setTimeout(() => setState("stack"), 300)
+                else {
+                    resize("stack")
+                    setState("stack")
                 }
-                else setState("stack")
             }
         },
 
@@ -364,13 +367,6 @@ export default function Card(props) {
         window.addEventListener("resize", resizeHandler)
         window.addEventListener("keydown", keyDownHandler)
         window.addEventListener("keyup", keyUpHandler)
-
-        setTimeout(() => setState("initial"), 0)
-
-        // Handle rare bug where the initial animation doesn't trigger (stuck in initial-to-stack)
-        setTimeout(() => {
-            if (stateRef.current === "initial-to-stack") setState("initial")
-        }, 1100)
 
         return () => {
             window.removeEventListener("pointermove", pointerMoveHandler)
