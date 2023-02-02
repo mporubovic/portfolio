@@ -172,6 +172,21 @@ export default function Card(props) {
                 setTransitionEnded(false)
                 setState("preview")
             }
+
+            if ((pointer === "down" && !props.locked)) {
+                setPointer("in")
+
+                if (!props.isActive) props.clickHandler()
+                props.lock()
+
+                setTransition(defaults.board.transition)
+                setZIndex(1000)
+                setZ(-1000)
+                setRotation(null)
+
+                resize("board")
+                setState("preview-to-board")
+            }
         },
 
         "preview": () => {
