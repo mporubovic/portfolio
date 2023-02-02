@@ -31,7 +31,7 @@ export default function Card(props) {
 
         preview: {
             distance: 15,
-            mobileDistance: 10,
+            mobileDistance: 7,
             opacity: 1,
             transition: 'transform 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95), opacity 0.25s cubic-bezier(0.74,-0.03, 0.25, 0.95)',
         },
