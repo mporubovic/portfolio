@@ -36,6 +36,7 @@
     text-transform: uppercase;
     font-size: 13px;
     flex-basis: 30px;
+    user-select: none;
 }
 
 .icon-wrapper {
